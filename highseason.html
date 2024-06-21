@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>백그라운드 이미지와 정사각형 그리기</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-start; /* 이미지 상단에 맞춤 */
+    }
+    .square {
+        position: absolute;
+        width: calc(10% - 2px); /* 간격을 고려한 정사각형 크기 */
+        height: calc(10% - 2px); /* 간격을 고려한 정사각형 크기 */
+        background-color: rgba(0, 255, 0, 0.5);
+        border: 1px solid #fff;
+    }
+</style>
+</head>
+<body>
+    <div class="container" id="container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 배열에 이미지 파일명을 넣습니다.
+            const images = ['highseason/hotel1.jpg', 'highseason/hotel2.jpg', 'highseason/hotel3.jpg', 'highseason/hotel4.jpg', 'highseason/hotel5.jpg'];
+
+            // 랜덤으로 이미지 선택
+            const randomIndex = Math.floor(Math.random() * images.length);
+            const randomImage = images[randomIndex];
+
+            // 이미지를 배경으로 설정
+            const container = document.getElementById('container');
+            container.style.backgroundImage = `url(${randomImage})`;
+            container.style.backgroundRepeat = 'no-repeat'; // 배경 이미지 반복 없음으로 설정
+
+            // 이미지의 비율 유지를 위해 window 사이즈에 맞게 조정
+            function resizeImage() {
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+
+                // 현재 이미지의 비율 계산
+                const image = new Image();
+                image.src = randomImage;
+                image.onload = function() {
+                    const imageWidth = image.width;
+                    const imageHeight = image.height;
+
+                    // 이미지가 화면보다 크면 비율 유지하면서 조정
+                    if (imageWidth > windowWidth || imageHeight > windowHeight) {
+                        const windowRatio = windowWidth / windowHeight;
+                        const imageRatio = imageWidth / imageHeight;
+
+                        if (windowRatio > imageRatio) {
+                            container.style.backgroundSize = 'auto 100%';
+                        } else {
+                            container.style.backgroundSize = '100% auto';
+                        }
+                    } else {
+                        container.style.backgroundSize = '100% 100%'; // 이미지가 작은 경우 100%로 설정
+                    }
+
+                    // 정사각형 배치
+                    const numSquares = 10;
+                    const squareSize = windowWidth * 0.1; // 정사각형 크기는 창 너비의 10%
+                    const gap = (windowWidth - squareSize * numSquares) / (numSquares + 1); // 간격 계산
+
+                    for (let i = 0; i < numSquares; i++) {
+                        const square = document.createElement('div');
+                        square.classList.add('square');
+                        square.style.left = `${gap * (i + 1) + squareSize * i}px`; // 왼쪽으로 간격과 크기 계산하여 배치
+                        container.appendChild(square);
+                    }
+                };
+            }
+
+            resizeImage();
+
+            // 창 크기 조정 시 이미지 크기와 정사각형 배치 조정
+            window.addEventListener('resize', resizeImage);
+        });
+    </script>
+</body>
+</html>
