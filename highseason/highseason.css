@@ -1,0 +1,54 @@
+.bgdiv {
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+select{
+    margin: 5px;
+    font-size: 25px;
+    text-align: center;
+}
+
+
+body {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.container{
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center;    /* 수직 중앙 정렬 */
+    height: 100vh;          /* 전체 화면 높이 */
+    background-size: 100% 100%; /* 배경 이미지를 요소 크기에 맞춰서 조정 */
+
+}
+
+.btnTrans {
+    border: 0px dotted red; 
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    /* opacity: 50%;  */
+    text-align-last: center;
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+
+}
+
+.sltTrans {
+    border: 1px dotted red;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    position: absolute;
+    text-align-last: center;
+    -webkit-appearance: none;
+    font-family: 'Sriracha', cursive;
+}

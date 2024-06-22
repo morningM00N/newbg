@@ -1,61 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Background Image Demo</title>
-    <style>
-        body {
-            display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: auto; /* 스크롤 가능하도록 설정 */
-        }
-        .container {
-            text-align: center;
-        }
-        .input-container {
-            margin-bottom: 20px;
-        }
-        .input-container input[type="number"] {
-            padding: 10px;
-            font-size: 16px;
-        }
-        .input-container button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <title>하이시즌</title>
+    <link href="highseason.css" rel="stylesheet">
+
 </head>
+
 <body>
-    <div class="container" id="container">
-        <div class="input-container">
-            <input type="number" id="imageNumber" placeholder="Enter a number">
-            <button onclick="changeBackground()">Set Background</button>
-        </div>
+    <div class="container" id="container" style="background-image: url(img/title.webp);width: 100%;height: 300px; background-repeat: no-repeat;background-position: center;    background-size: auto;" >
+                    <select id="sltMainBoard">
+                        <option>메인보드</option>
+                        <option>A1</option>
+                        <option>A2</option>
+                        <option>B1</option>
+                        <option>B2</option>
+                        <option>C1</option>
+                        <option>C2</option>
+                        <option>D1</option>
+                        <option>D2</option>
+                    </select>
+                    <select id="sltStaffBoard">
+                        <option>스태프보드</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                    <button style="font-size: 25px;"onclick="changeBackground()">시작</button>
+
+
+
     </div>
 
-    <script>
-        function changeBackground() {
-            var number = document.getElementById("imageNumber").value;
-            var imageUrl = `img/board${number}.jpg`;
+    <body id="body">
+        <div id="main" class="bgdiv">
+        </div>
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="../common/jhFunctions.js"></script>
+        <script type="text/javascript" src="highseason.js"></script>
 
-            // Check if the image exists
-            var img = new Image();
-            img.onload = function() {
-                document.body.style.backgroundImage = `url(${imageUrl})`;
-                document.getElementById("container").style.display = "none"; // 숨기기
-            };
-            img.onerror = function() {
-                alert(`Image board${number}.jpg not found!`);
-            };
-            img.src = imageUrl;
-        }
-    </script>
+    </body>
+
 </body>
+
 </html>
