@@ -2,8 +2,22 @@ funcWidthPerHeight(2187 / 1448)
 
 funcUpdatePageSize(true)
 
+var gameStart = false
+function funcInputValue() {
+    let val = prompt("점수를 입력하세요.")
+    if (isNaN(Number(val))) return
+    event.target.innerHTML = val
+    let score = 0
+    for (let i = 0; i < 10; i++) {
+        score += Number(document.getElementById("inputScore" + (i)).innerHTML)
+    }
+    $("#inputScore10")[0].innerHTML=score
+}
+
 let prefix = "HS_"
 function funcPlainSlash() {
+    if (gameStart==false)
+        return
     if (event.target.innerHTML == "/") {
         event.target.innerHTML = ""
         localStorage.removeItem(prefix + event.target.id)
@@ -15,6 +29,9 @@ function funcPlainSlash() {
 }
 
 function funcSlash() {
+    if (gameStart==false)
+        return
+
     let id = event.target.id
     if (id[0] == 's') {
         id = id.substr(1)
@@ -34,6 +51,9 @@ function funcSlash() {
 }
 
 function funcCircleSlash() {
+    if (gameStart==false)
+        return
+
     let id = event.target.id
     if (id[0] == 's') {
         id = id.substr(1)
@@ -71,18 +91,18 @@ function loadStorage() {
         let key = localStorage.key(i)
         if (key.substring(0, 3) == "HS_") {
             let id = key.substring(3)
-            if (id.indexOf("btnHotelRoom")!=-1 || id.indexOf("btnMoney")!=-1 ){
+            if (id.indexOf("btnHotelRoom") != -1 || id.indexOf("btnMoney") != -1) {
                 let val = localStorage.getItem(key)
-                $("#"+id)[0].style.border = (pageWidth / 400 > 1 ? pageWidth / 400 : 1) + "px solid black"
-                if (val != 'O'){
-                    $("#s"+id)[0].innerHTML="/"
+                $("#" + id)[0].style.border = (pageWidth / 400 > 1 ? pageWidth / 400 : 1) + "px solid black"
+                if (val != 'O') {
+                    $("#s" + id)[0].innerHTML = "/"
 
                 }
                 //document.getElementById(id).innerHTML="/"
             }
-            else{
-                console.log("#"+id)
-                $("#"+id)[0].innerHTML="/"
+            else {
+                console.log("#" + id)
+                $("#" + id)[0].innerHTML = "/"
             }
 
         }
@@ -93,17 +113,11 @@ function funcDraw() {
         let ystep = 0.046
         for (let i = 0; i < 11; i++) {
             if (i < 10) {
-                let btn = funcInsertElement("inputScore" + (i), "input", "btnTrans", 0.067, 0.0581 + ystep * i, 0.091, 0.0895 + ystep * i)
+                let btn = funcInsertElement("inputScore" + (i), "button", "btnTrans", 0.067, 0.0581 + ystep * i, 0.091, 0.0895 + ystep * i)
+                btn.onclick=funcInputValue
             }
             if (i == 10) {
-                let btn = funcInsertElement("inputScore" + (i), "input", "btnTrans", 0.06, 0.066 + ystep * i, 0.099, 0.1 + ystep * i)
-                btn.onclick = function () {
-                    let score = 0
-                    for (let i = 0; i < 10; i++) {
-                        score += Number(document.getElementById("inputScore" + (i)).value)
-                    }
-                    event.target.value = score
-                }
+                let btn = funcInsertElement("inputScore" + (i), "button", "btnTrans", 0.06, 0.066 + ystep * i, 0.099, 0.1 + ystep * i)
             }
 
         }
@@ -334,22 +348,21 @@ $(window).resize(function () {
 funcDraw()
 
 function changeBackground(num) {
-    console.log(num)
-let number
-    if (num!=undefined){
+    gameStart = true
+    let number
+    if (num != undefined) {
         number = num
-    } else{
+    } else {
         let num1 = $("#sltMainBoard")[0].selectedIndex
         let num2 = $("#sltStaffBoard")[0].value
         console.log(num1)
         console.log(num2)
-        if (num1==0 || num2=="스태프보드")
-            {
-                return
-            }
-            number = num1*10 + Number(num2)
+        if (num1 == 0 || num2 == "스태프보드") {
+            return
+        }
+        number = num1 * 10 + Number(num2)
     }
-    localStorage.setItem("HSboard",number)
+    localStorage.setItem("HSboard", number)
     document.getElementById("main").style.backgroundImage = `url('img/board${number}.jpg')`
 
 
