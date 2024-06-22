@@ -2,6 +2,10 @@ funcWidthPerHeight(2187 / 1448)
 
 funcUpdatePageSize(true)
 
+function funcInputScore(){
+    let score = prompt("점수 입력")
+    event.target.innerHTML = score
+}
 let prefix = "HS_"
 function funcPlainSlash() {
     if (event.target.innerHTML == "/") {
@@ -93,16 +97,17 @@ function funcDraw() {
         let ystep = 0.046
         for (let i = 0; i < 11; i++) {
             if (i < 10) {
-                let btn = funcInsertElement("inputScore" + (i), "input", "btnTrans", 0.067, 0.0581 + ystep * i, 0.091, 0.0895 + ystep * i)
+                let btn = funcInsertElement("inputScore" + (i), "button", "btnTrans", 0.067, 0.0581 + ystep * i, 0.091, 0.0895 + ystep * i)
+                btn.onclick=funcInputScore
             }
             if (i == 10) {
-                let btn = funcInsertElement("inputScore" + (i), "input", "btnTrans", 0.06, 0.066 + ystep * i, 0.099, 0.1 + ystep * i)
+                let btn = funcInsertElement("inputScore" + (i), "button", "btnTrans", 0.06, 0.066 + ystep * i, 0.099, 0.1 + ystep * i)
                 btn.onclick = function () {
                     let score = 0
                     for (let i = 0; i < 10; i++) {
                         score += Number(document.getElementById("inputScore" + (i)).value)
                     }
-                    event.target.value = score
+                    event.target.innerHTML = score
                 }
             }
 
