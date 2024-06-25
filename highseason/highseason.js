@@ -83,13 +83,19 @@ function loadStorage() {
     }
     let answer = confirm("기존에 플레이한 기록이 있습니다. 이어하시겠습니까?")
     if (answer == null || answer == false) {
-        localStorage.clear()
+        localStorage.removeItem("HSboard")
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i)
+            if (key.substring(0, 3) == prefix) {
+                localStorage.removeItem(key)
+            }    
+        }
         return
     }
     changeBackground(played)
     for (let i = 0; i < localStorage.length; i++) {
         let key = localStorage.key(i)
-        if (key.substring(0, 3) == "HS_") {
+        if (key.substring(0, 3) == prefix) {
             let id = key.substring(3)
             if (id.indexOf("btnHotelRoom") != -1 || id.indexOf("btnMoney") != -1) {
                 let val = localStorage.getItem(key)

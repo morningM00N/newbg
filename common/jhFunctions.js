@@ -186,6 +186,7 @@ function appendElement(_type, _id, _className, _left, _top, _width, _height, _fo
 function funcInsertElement(_id, _type, _class, leftTopX, leftTopY, rightBottomX, rightBottomY, _fixedRatio) { // _fixedRatio = width / height
     var newElement = document.getElementById(_id)
     if (newElement == null) {
+        allGenItemsID.push(_id)
         newElement = document.createElement(_type)
         nameOfRelocatedElements.push(_id)
     }
