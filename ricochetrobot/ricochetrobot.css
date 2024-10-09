@@ -1,0 +1,111 @@
+body {
+    margin: 5px; /* 기본 여백 없애기 */
+    display: flex;
+    height: 100vh; /* 전체 화면 높이 설정 */
+    align-items: center; /* 수직 중앙 정렬 */
+    flex-wrap: wrap; /* 공간 부족 시 줄 바꿈 */
+
+}
+.robot {
+    position: absolute;
+    transition: all 1s ease; /* 이동 애니메이션 */
+}
+.boardTbl {
+    border-collapse: collapse; /* 셀 간격 없애기 */
+    width: 98vmin; /* 테이블 높이를 창 높이로 설정 */
+    height: 98vmin; /* 테이블 높이를 창 높이로 설정 */
+    table-layout: fixed; /* 고정된 테이블 레이아웃 */
+
+}
+
+.boardRemote {
+    margin:5vmin;
+    border-collapse: collapse; /* 셀 간격 없애기 */
+    width: 60vmin; /* 테이블 높이를 창 높이로 설정 */
+    height: 40vmin; /* 테이블 높이를 창 높이로 설정 */
+}
+th, td {
+    border: none; /* 검은색 실선 테두리 */
+    padding: 0; /* 셀 내 여백 없애기 */
+    text-align: center; /* 텍스트 정렬 */
+    box-sizing: border-box; /* 테두리와 패딩을 포함한 크기 계산 */
+    position: relative; /* 절대 위치를 위한 상대 위치 설정 */
+    background-size: cover;
+}
+
+.round-button {
+    width: 100%; /* 버튼 너비 설정 */
+    height: 100%; /* 버튼 높이 설정 */
+    border: 0px; /* 기본 테두리 제거 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    color: white; /* 버튼 텍스트 색상 */
+    font-size: 18px; /* 버튼 텍스트 크기 */
+    font-weight: bold; /* 버튼 텍스트 두께 */
+    cursor: pointer; /* 마우스 포인터 커서 */
+    box-shadow: inset -4px -4px 6px rgba(0, 0, 0, 0.5), 
+    inset 4px 4px 6px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease; /* 모든 변화에 대한 부드러운 전환 효과 */
+    outline: none; /* 포커스 윤곽선 제거 */
+    position: absolute; /* 상대 위치 설정 */
+    top: 0; /* 상단 0 */
+    left: 0; /* 왼쪽 0 */
+}
+
+.wall-button {
+    width: 100%; /* 버튼 너비 설정 */
+    height: 100%; /* 버튼 높이 설정 */
+    border: 0px; /* 기본 테두리 제거 */
+    margin: 0px;
+    padding: 0px;
+    position: absolute; /* 상대 위치 설정 */
+    top: 0; /* 상단 0 */
+    left: 0; /* 왼쪽 0 */
+    background-color: transparent;
+}
+
+.red-button {
+    background: radial-gradient(circle at center, #ffffff 0%, #ff6347 40%, #8b0000 100%);
+
+}
+
+.blue-button {
+    background: radial-gradient(circle at center, #ffffff 0%, #1e90ff 40%, #00008b 100%);
+}
+
+.gray-button {
+    background: radial-gradient(circle at center, #ffffff 0%, #a9a9a9 40%, #696969 100%);
+}
+
+.yellow-button {
+    background: radial-gradient(circle at center, #ffffff 0%, #ffd700 40%, #ff8c00 100%);
+}
+
+.green-button {
+    background: radial-gradient(circle at center, #ffffff 0%, #32cd32 40%, #006400 100%);
+}
+
+.triangle-button {
+    width: 50%;
+    height: 50%;
+    background-color: black;
+    color: white;
+    line-height: 10px;
+    border: none;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* 삼각형 모양 */
+    transition: background-color 0.3s;
+
+}
+
+.rotate-0 {
+    transform: rotate(0deg); 
+}
+.rotate-90 {
+    transform: rotate(90deg); 
+}
+
+.rotate-180 {
+    transform: rotate(180deg); 
+}
+.rotate-270 {
+    transform: rotate(270deg); 
+}
