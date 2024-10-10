@@ -5,12 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ricochet Robot</title>
     <link rel="stylesheet" type="text/css" href="ricochetrobot.css">
+    
+    </head>
+    
+    <body id="mainBody">
+        <div class="center">
+            <table id="boardTbl" class="boardTbl"></table>
+            <div>
+                <table id="tileSelect">
+                    <tr>
+                        <td>seed</td>
+                        <td><input value="0"></td>
+                    </tr>
+                    <tr>
+                        <td><select id="sector1">
+                                <option>-</option>
+                                <option>1-1</option>
+                                <option>1-2</option>
+                                <option>2-1</option>
+                                <option>2-2</option>
+                                <option>3-1</option>
+                                <option>3-2</option>
+                                <option>4-1</option>
+                                <option>4-2</option>
+                            </select></td>
+                        <td><select id="sector2">
+                                <option>-</option>
+                                <option>1-1</option>
+                                <option>1-2</option>
+                                <option>2-1</option>
+                                <option>2-2</option>
+                                <option>3-1</option>
+                                <option>3-2</option>
+                                <option>4-1</option>
+                                <option>4-2</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td><select id="sector3">
+                                <option>-</option>
+                                <option>1-1</option>
+                                <option>1-2</option>
+                                <option>2-1</option>
+                                <option>2-2</option>
+                                <option>3-1</option>
+                                <option>3-2</option>
+                                <option>4-1</option>
+                                <option>4-2</option>
+                            </select></td>
+                        <td><select id="sector4">
+                                <option>-</option>
+                                <option>1-1</option>
+                                <option>1-2</option>
+                                <option>2-1</option>
+                                <option>2-2</option>
+                                <option>3-1</option>
+                                <option>3-2</option>
+                                <option>4-1</option>
+                                <option>4-2</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button style="width: 100%;">run</button></td>
+                    </tr>
+                </table>
+                <table id="remotered" class="boardRemote"></table>
+                <table id="remotegreen" class="boardRemote"></table>
+                <table id="remoteblue" class="boardRemote"></table>
+                <table id="remoteyellow" class="boardRemote"></table>
+                <table id="remotegray" class="boardRemote"></table>
+            </div>
+        </div>
+    
+        <script src="ricochetrobot.js"></script>
+    </body>
+    
+    </html>
 
-</head>
-<body id="mainBody">
-
-    <table id="boardTbl" class="boardTbl"></table>
-    <table id="remoteControlloerTbl" class="boardRemote"></table>
-    <script src="ricochetrobot.js"></script>
-</body>
-</html>
+    
