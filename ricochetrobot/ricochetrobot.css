@@ -28,10 +28,10 @@ body {
   
 
 .boardRemote {
+    table-layout: fixed; /* 고정된 테이블 레이아웃 */
     border-collapse: collapse; /* 셀 간격 없애기 */
     width: 12vmin; /* 테이블 높이를 창 높이로 설정 */
     height: 12vmin; /* 테이블 높이를 창 높이로 설정 */
-    table-layout: fixed; /* 고정된 테이블 레이아웃 */
 }
 th, td {
     border: none; 
@@ -96,17 +96,6 @@ th, td {
     background: radial-gradient(circle at center, #ffffff 0%, #32cd32 40%, #006400 100%);
 }
 
-.triangle-button {
-    width: 50%;
-    height: 50%;
-    background-color: black;
-    color: white;
-    line-height: 10px;
-    border: none;
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* 삼각형 모양 */
-    transition: background-color 0.3s;
-
-}
 
 .rotate-0 {
     transform: rotate(0deg); 
