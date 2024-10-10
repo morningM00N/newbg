@@ -175,14 +175,6 @@ function funcDraw() {
 
     colorList.forEach(color => {
 
-        let buttonleft = document.createElement('button')
-        buttonleft.className = "triangle-button rotate-270"
-        let buttonright = document.createElement('button')
-        buttonright.className = "triangle-button rotate-90"
-        let buttontop = document.createElement('button')
-        buttontop.className = "triangle-button"
-        let buttonbottom = document.createElement('button')
-        buttonbottom.className = "triangle-button rotate-180"
         let button = document.createElement('button')
         button.className = "round-button "+color+"-button"
 
@@ -192,24 +184,30 @@ function funcDraw() {
             tbl.appendChild(tr)
             for (let j = 0; j < 3; j++) {
                 let td = document.createElement('td');
+                tr.appendChild(td)
+                td.style.fontSize="3vmin"
                 if (i==1 && j==1) td.appendChild(button)
                 if (i==0 && j==1) {
-                    td.appendChild(buttontop)
+                    td.innerHTML="▲"
+                    //td.appendChild(buttontop)
                     td.onclick=function (){moveRobot(color,TOP)}
                 }
                 if (i==1 && j==0){
-                    td.appendChild(buttonleft)
+                    td.innerHTML="◀"
+                    //td.appendChild(buttonleft)
                     td.onclick=function (){moveRobot(color,LEFT)}
                 }
                 if (i==1 && j==2){
-                    td.appendChild(buttonright)
+                    td.innerHTML="▶"
+                    //td.appendChild(buttonright)
                     td.onclick=function (){moveRobot(color,RIGHT)}
                 }
                 if (i==2 && j==1){
-                    td.appendChild(buttonbottom)
+                    td.innerHTML="▼"
+                    //td.appendChild(buttonbottom)
                     td.onclick=function (){moveRobot(color,BOTTOM)}
                 }
-                tr.appendChild(td)
+                
             }
         }
 
