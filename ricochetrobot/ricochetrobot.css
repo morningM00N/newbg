@@ -15,7 +15,8 @@ body {
     width: 98vmin; /* 테이블 높이를 창 높이로 설정 */
     height: 98vmin; /* 테이블 높이를 창 높이로 설정 */
     table-layout: fixed; /* 고정된 테이블 레이아웃 */
-    margin-right:3vmin;
+    margin-right:1vmin;
+    margin-left:1vmin;
 }
 
 
