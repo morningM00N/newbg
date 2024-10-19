@@ -13,7 +13,7 @@ function pseudo_rand() {
     return (seed >> 16) & 0x3fffffff;
 }
 
-window.addEventListener('resize', function() {
+function reDraw(){
     let cellSize = board.tiles[0][0].td.getBoundingClientRect().width
     colorList.forEach(element => {
         let btn = board.robots[element][0]
@@ -26,6 +26,16 @@ window.addEventListener('resize', function() {
         btn.style.top = (board.tiles[row][col].td.getBoundingClientRect().top + cellSize * (1 - robotSizeInTd) / 2) + "px"
     });
 
+    let removeDiv = document.getElementById("removeDiv")
+    if (window.innerWidth>window.innerHeight){
+        removeDiv.style.flexDirection="column"
+    } else{
+        removeDiv.style.flexDirection="row"
+    }
+
+}
+window.addEventListener('resize', function() {
+    reDraw()
   });
   
 let originalBoard = []
@@ -385,5 +395,9 @@ class Board {
 }
 funcDraw()
 
+seed=7
+
 let board = new Board()
 board.init(64)
+
+reDraw()
