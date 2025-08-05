@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재치와 눈치</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            position: relative;
+            width: 998px;
+            /* 직사각형 너비 */
+            height: 300px;
+            /* 직사각형 높이 */
+            cursor: pointer;
+            perspective: 800px;
+            /* 3D 효과를 위한 원근감 설정 */
+        }
+
+        .flipper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        /* 클릭 시 실행될 애니메이션 */
+        .container.flipped .flipper {
+            transform: rotateY(180deg);
+        }
+
+        .front,
+        .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            /* 뒷면 숨기기 */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .front {
+            background-color: #fff;
+            transform: rotateY(0deg);
+        }
+
+        .back {
+            background-color: #fff;
+            transform: rotateY(180deg);
+        }
+
+        .front img,
+        .back img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        table {
+            left: 5%;
+            position: absolute;
+            width: 82%;
+            height: 100%;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="imageContainer">
+        <div class="flipper">
+            <div class="front">
+                <img src="problem.png" alt="문제">
+                <table>
+                    <tr>
+                        <td id="tdp1"></td>
+                    </tr>
+                    <tr>
+                        <td id="tdp2"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="back">
+                <img src="answer.png" alt="정답">
+                <table>
+                    <tr>
+                        <td id="tda1" style="width: 30%;"></td>
+                        <td id="tdr1" style="width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td id="tda2" style="width: 30%;"></td>
+                        <td id="tdr2" style="width: 70%;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBlTDBERR1Ti5fnr68uMBhEc3wVtq_v-3zH61BkLn68es1E6iVcrJ7ZREdcQfalto9JhxAZNeaFLep/pub?output=csv';
+
+        async function fetchSheetData() {
+            try {
+                // CSV 데이터 가져오기
+                const response = await fetch(sheetUrl);
+                const csvText = await response.text();
+
+                // CSV 데이터를 줄 단위로 파싱
+                const rows = csvText.trim().split('\n');
+
+                // 첫 번째 행은 헤더이므로 제거
+                rows.shift();
+
+                // 데이터 파싱 및 HTML에 추가
+                rows.forEach(row => {
+                    // 쉼표로 구분된 각 셀 데이터
+                    const [question, answer, reference] = row.split(',');
+                    problems.push([question, answer, reference])
+                });
+
+            } catch (error) {
+                console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
+                questionsContainer.innerHTML = '<p>데이터를 불러오지 못했습니다. 스프레드시트 URL을 확인해주세요.</p>';
+            }
+        }
+        let problemShow = true
+        let numOfProblems = 100
+        let problems = []
+        for (let i = 0; i < numOfProblems; i++) {
+            problems.push(["p" + i, "a" + i, "r" + i])
+        }
+        let used = []
+        for (let i = 0; i < numOfProblems; i++) {
+            used.push(false)
+        }
+
+        fetchSheetData();
+
+        const imageContainer = document.getElementById('imageContainer');
+
+        function funcProblemSetting() {
+            let randIdx = Math.floor(Math.random() * numOfProblems)
+            while (used[randIdx] == true) {
+                randIdx = Math.floor(Math.random() * numOfProblems)
+            }
+            used[randIdx] = true
+            let randIdx2 = Math.floor(Math.random() * numOfProblems)
+            while (used[randIdx2] == true) {
+                randIdx2 = Math.floor(Math.random() * numOfProblems)
+            }
+            used[randIdx2] = true
+            document.getElementById("tdp1").innerHTML = problems[randIdx][0]
+            document.getElementById("tdp2").innerHTML = problems[randIdx2][0]
+
+            setTimeout(() => {
+                document.getElementById("tda1").innerHTML = problems[randIdx][1]
+                document.getElementById("tda2").innerHTML = problems[randIdx2][1]
+                document.getElementById("tdr1").innerHTML = problems[randIdx][2]
+                document.getElementById("tdr2").innerHTML = problems[randIdx2][2]
+            }, 1000)
+        }
+
+        funcProblemSetting()
+
+        imageContainer.addEventListener('click', () => {
+            let ans = null
+            if (problemShow == true) {
+                ans = confirm("정답을 확인하겠습니까?")
+            } else {
+                ans = confirm("새로운 문제를 출제합니다!")
+            }
+            if (ans != true) return
+            if (problemShow == true) {
+                problemShow = false
+            } else {
+                funcProblemSetting()
+                problemShow = true
+            }
+            imageContainer.classList.toggle('flipped');
+        });
+    </script>
+</body>
+
+</html>
