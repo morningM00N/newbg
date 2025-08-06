@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하이시즌 주사위판</title>
+</head>
+<style>
+    div{
+        width: 100vw;
+        height: 100vh;
+        background-image: url('https://github.com/morningM00N/newbg/blob/main/highseason/img/bg.png?raw=true');
+    }
+    img {
+        width:100vw;
+    }
+</style>
+<body>
+    <div>
+        <img id="imgBtn" 
+            src="https://github.com/morningM00N/newbg/blob/main/highseason/img/actionvert.jpg?raw=true">
+    </div>
+</body>
+<script>
+    document.getElementById('imgBtn').addEventListener('click', function () {
+        document.documentElement.requestFullscreen();
+    }
+    )
+</script>
+
+</html>
