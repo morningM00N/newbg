@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +17,9 @@
 
         .container {
             position: relative;
-            width: 998px;
+            width: 100vw;
             /* 직사각형 너비 */
-            height: 300px;
+            height: 100vh;
             /* 직사각형 높이 */
             cursor: pointer;
             perspective: 800px;
@@ -79,15 +80,17 @@
         }
 
         td {
+            height: 50%;
             text-align: center;
         }
     </style>
 </head>
+
 <body>
     <div class="container" id="imageContainer">
         <div class="flipper">
             <div class="front">
-                <img src="problem.png" alt="문제">
+                <img id="imgFront" src="problem.png" alt="문제">
                 <table>
                     <tr>
                         <td id="tdp1"></td>
@@ -98,7 +101,7 @@
                 </table>
             </div>
             <div class="back">
-                <img src="answer.png" alt="정답">
+                <img id="imgBack" src="answer.png" alt="정답">
                 <table>
                     <tr>
                         <td id="tda1" style="width: 30%;"></td>
@@ -114,100 +117,166 @@
     </div>
 
     <script>
+
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBlTDBERR1Ti5fnr68uMBhEc3wVtq_v-3zH61BkLn68es1E6iVcrJ7ZREdcQfalto9JhxAZNeaFLep/pub?output=csv';
-
-        let problems = [];
-        let used = [];
-        let problemShow = true;
-
-        // 데이터 로딩 상태 표시
-        document.getElementById("tdp1").innerHTML = "데이터 로딩 중...";
-        document.getElementById("tdp2").innerHTML = "잠시만 기다려주세요";
 
         async function fetchSheetData() {
             try {
+                // CSV 데이터 가져오기
                 const response = await fetch(sheetUrl);
-                if (!response.ok) throw new Error('Network response was not ok');
-                
                 const csvText = await response.text();
+
+                // CSV 데이터를 줄 단위로 파싱
                 const rows = csvText.trim().split('\n');
-                rows.shift(); // 헤더 제거
 
-                return rows.map(row => {
+                // 첫 번째 행은 헤더이므로 제거
+                rows.shift();
+
+                // 데이터 파싱 및 HTML에 추가
+                rows.forEach(row => {
+                    // 쉼표로 구분된 각 셀 데이터
                     const [question, answer, reference] = row.split(',');
-                    return [question, answer, reference];
+                    problems.push([question, answer, reference])
+                    used.push(false)
                 });
+
             } catch (error) {
-                console.error('데이터 가져오기 오류:', error);
-                return [];
+                console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
             }
+            await funcProblemSetting()
+        }
+        let problemShow = true
+
+        let problems = []
+        let used = []
+        let usedPrev = []
+        for (let i = 0; i < 125; i++) {
+            usedPrev.push(false)
         }
 
-        async function initApp() {
-            problems = await fetchSheetData();
-            used = new Array(problems.length).fill(false);
-            
-            if (problems.length === 0) {
-                document.getElementById("tdp1").innerHTML = "데이터를 불러오지 못했습니다";
-                document.getElementById("tdp2").innerHTML = "스프레드시트 URL을 확인해주세요";
-                return;
-            }
-            
-            await funcProblemSetting();
-        }
+        fetchSheetData();
+
+        const imageContainer = document.getElementById('imageContainer');
 
         async function funcProblemSetting() {
-            // 사용 가능한 문제가 없는 경우 리셋
-            if (used.every(u => u) && problems.length > 0) {
-                used.fill(false);
+            while (true) {
+                console.log("problems.length",problems.length)
+                let totalNumOfProblems = 125 + problems.length
+                let pTemp = Math.floor(Math.random() * totalNumOfProblems)
+                console.log("pTemp",pTemp)
+                if (pTemp < 125) {
+                    document.getElementById("tdp1").innerHTML = ""
+                    document.getElementById("tdp2").innerHTML = ""
+                    document.getElementById("tda1").innerHTML = ""
+                    document.getElementById("tda2").innerHTML = ""
+                    document.getElementById("tdr1").innerHTML = ""
+                    document.getElementById("tdr2").innerHTML = ""
+
+                    // answer (1).png - answer (55).png
+                    // answersol (1).png - answersol (55).png
+                    // problem (1).png - answer (70).png
+                    if (usedPrev[pTemp] == false) {
+                        usedPrev[pTemp]=true
+                        let randIdx = pTemp + 1
+                        if (randIdx <= 55) {
+                            document.getElementById("imgFront").src = "https://github.com/morningM00N/bg/blob/master/img/wits/answersol (" + randIdx + ").png?raw=true"
+                            document.getElementById("imgBack").src = "https://github.com/morningM00N/bg/blob/master/img/wits/answer (" + randIdx + ").png?raw=true"
+                        } else {
+                            randIdx -= 55
+                            document.getElementById("imgFront").src = "https://github.com/morningM00N/bg/blob/master/img/wits/problem (" + randIdx + ").png?raw=true"
+                            document.getElementById("imgBack").src = "https://github.com/morningM00N/bg/blob/master/img/wits/problemsol (" + randIdx + ").png?raw=true"
+                        }
+                        console.log("set img")
+                        break
+                    }
+                } else {
+                    let numOfProblems = problems.length
+                    let randIdx = Math.floor(Math.random() * numOfProblems)
+                    while (used[randIdx] == true) {
+                        randIdx = Math.floor(Math.random() * numOfProblems)
+                    }
+                    used[randIdx] = true
+                    let randIdx2 = Math.floor(Math.random() * numOfProblems)
+                    while (used[randIdx2] == true) {
+                        randIdx2 = Math.floor(Math.random() * numOfProblems)
+                    }
+                    used[randIdx2] = true
+                    document.getElementById("tdp1").innerHTML = problems[randIdx][0]
+                    document.getElementById("tdp2").innerHTML = problems[randIdx2][0]
+
+                    setTimeout(() => {
+                        document.getElementById("tda1").innerHTML = problems[randIdx][1]
+                        document.getElementById("tda2").innerHTML = problems[randIdx2][1]
+                        document.getElementById("tdr1").innerHTML = "<a href='https://" + problems[randIdx][2] + "' target='_blank'>" + problems[randIdx][2] + "</a>"
+                        document.getElementById("tdr2").innerHTML = problems[randIdx2][2]
+                    }, 1000)
+                    break
+                }
             }
-
-            const getRandomUnusedIndex = () => {
-                const unusedIndices = used
-                    .map((isUsed, index) => isUsed ? null : index)
-                    .filter(index => index !== null);
-                
-                if (unusedIndices.length === 0) return null;
-                return unusedIndices[Math.floor(Math.random() * unusedIndices.length)];
-            };
-
-            const randIdx1 = getRandomUnusedIndex();
-            const randIdx2 = getRandomUnusedIndex();
-
-            if (randIdx1 === null || randIdx2 === null) {
-                document.getElementById("tdp1").innerHTML = "모든 문제를 사용했습니다";
-                document.getElementById("tdp2").innerHTML = "새로고침 해주세요";
-                return;
-            }
-
-            used[randIdx1] = true;
-            used[randIdx2] = true;
-
-            document.getElementById("tdp1").innerHTML = problems[randIdx1][0];
-            document.getElementById("tdp2").innerHTML = problems[randIdx2][0];
-            
-            // 정답 데이터 즉시 설정 (setTimeout 제거)
-            document.getElementById("tda1").innerHTML = problems[randIdx1][1];
-            document.getElementById("tda2").innerHTML = problems[randIdx2][1];
-            document.getElementById("tdr1").innerHTML = problems[randIdx1][2];
-            document.getElementById("tdr2").innerHTML = problems[randIdx2][2];
         }
 
-        // 초기화 실행
-        initApp();
+        function adjustFontSize() {
+            imageContainer.style.width = "100vw"
+            imageContainer.style.height = "100vh"
 
-        // 클릭 이벤트 핸들러 (confirm 제거)
-        imageContainer.addEventListener('click', async () => {
-            if (problemShow) {
-                // 문제 → 정답 전환
-                imageContainer.classList.add('flipped');
-            } else {
-                // 정답 → 새 문제 전환
-                imageContainer.classList.remove('flipped');
-                await funcProblemSetting();
+            console.log(imageContainer.getBoundingClientRect().height)
+            console.log(imageContainer.getBoundingClientRect().width)
+            if (imageContainer.getBoundingClientRect().width / 10 * 3 < imageContainer.getBoundingClientRect().height) {
+                imageContainer.style.height = imageContainer.getBoundingClientRect().width / 10 * 3 + "px"
             }
-            problemShow = !problemShow;
-        });
+            else if (imageContainer.getBoundingClientRect().width / 10 * 3 > imageContainer.getBoundingClientRect().height) {
+                imageContainer.style.width = imageContainer.getBoundingClientRect().height * 3 / 10 + "px"
+            }
+
+            console.log(imageContainer.style.height)
+            console.log(imageContainer.style.width)
+
+
+            const tds = document.querySelectorAll('td');
+
+            tds.forEach(td => {
+                // TD 높이 계산 (border/padding 포함)
+                const tdHeight = td.clientHeight;
+
+                // 폰트 크기 = 높이의 40%
+                let fontSize = tdHeight * 0.2;
+
+                // 폰트 크기 적용
+                td.style.fontSize = `${fontSize}px`;
+            });
+
+
+        }
+
+
+        function funcFlip(event) {
+            if (event.target.tagName == "A" || event.target.closest('a')) return
+            let ans = null
+            if (problemShow == true) {
+                ans = confirm("정답을 확인하겠습니까?")
+            } else {
+                ans = confirm("새로운 문제를 출제합니다!")
+            }
+            if (ans != true) return
+
+
+            if (problemShow == true) {
+                problemShow = false
+            } else {
+                document.getElementById("imgFront").src = "problem.png"
+                funcProblemSetting()
+                problemShow = true
+            }
+            imageContainer.classList.toggle('flipped');
+
+        }
+
+        imageContainer.addEventListener('click', funcFlip);
+
+        window.addEventListener('load', adjustFontSize);
+        window.addEventListener('resize', adjustFontSize);
+
     </script>
 </body>
+
 </html>
