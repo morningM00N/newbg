@@ -75,7 +75,7 @@
         table {
             left: 5%;
             position: absolute;
-            width: 82%;
+            width: 78%;
             height: 100%;
         }
 
@@ -104,12 +104,12 @@
                 <img id="imgBack" src="answer.png" alt="정답">
                 <table>
                     <tr>
-                        <td id="tda1" style="width: 30%;"></td>
-                        <td id="tdr1" style="width: 70%;"></td>
+                        <td id="tda1" style="width: 40%;"></td>
+                        <td id="tdr1" style="width: 60%;"></td>
                     </tr>
                     <tr>
-                        <td id="tda2" style="width: 30%;"></td>
-                        <td id="tdr2" style="width: 70%;"></td>
+                        <td id="tda2" style="width: 40%;"></td>
+                        <td id="tdr2" style="width: 60%;"></td>
                     </tr>
                 </table>
             </div>
@@ -118,7 +118,7 @@
 
     <script>
 
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBlTDBERR1Ti5fnr68uMBhEc3wVtq_v-3zH61BkLn68es1E6iVcrJ7ZREdcQfalto9JhxAZNeaFLep/pub?output=csv';
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBlTDBERR1Ti5fnr68uMBhEc3wVtq_v-3zH61BkLn68es1E6iVcrJ7ZREdcQfalto9JhxAZNeaFLep/pub?output=tsv';
 
         async function fetchSheetData() {
             try {
@@ -135,7 +135,7 @@
                 // 데이터 파싱 및 HTML에 추가
                 rows.forEach(row => {
                     // 쉼표로 구분된 각 셀 데이터
-                    const [question, answer, reference] = row.split(',');
+                    const [question, answer, reference] = row.split('\t');
                     problems.push([question, answer, reference])
                     used.push(false)
                 });
@@ -158,9 +158,8 @@
 
         const imageContainer = document.getElementById('imageContainer');
 
-        async function funcProblemSetting() {
+        function funcProblemSetting() {
             while (true) {
-                console.log("problems.length",problems.length)
                 let totalNumOfProblems = 125 + problems.length
                 let pTemp = Math.floor(Math.random() * totalNumOfProblems)
                 console.log("pTemp",pTemp)
@@ -190,6 +189,11 @@
                         break
                     }
                 } else {
+
+
+                    document.getElementById("imgFront").src = "problem.png"
+                    document.getElementById("imgBack").src = "answer.png"
+
                     let numOfProblems = problems.length
                     let randIdx = Math.floor(Math.random() * numOfProblems)
                     while (used[randIdx] == true) {
@@ -201,13 +205,15 @@
                         randIdx2 = Math.floor(Math.random() * numOfProblems)
                     }
                     used[randIdx2] = true
+                    console.log(randIdx)
+                    console.log(randIdx2)
                     document.getElementById("tdp1").innerHTML = problems[randIdx][0]
                     document.getElementById("tdp2").innerHTML = problems[randIdx2][0]
 
                     setTimeout(() => {
                         document.getElementById("tda1").innerHTML = problems[randIdx][1]
                         document.getElementById("tda2").innerHTML = problems[randIdx2][1]
-                        document.getElementById("tdr1").innerHTML = "<a href='https://" + problems[randIdx][2] + "' target='_blank'>" + problems[randIdx][2] + "</a>"
+                        document.getElementById("tdr1").innerHTML = problems[randIdx][2]
                         document.getElementById("tdr2").innerHTML = problems[randIdx2][2]
                     }, 1000)
                     break
@@ -239,7 +245,7 @@
                 const tdHeight = td.clientHeight;
 
                 // 폰트 크기 = 높이의 40%
-                let fontSize = tdHeight * 0.2;
+                let fontSize = tdHeight * 0.15;
 
                 // 폰트 크기 적용
                 td.style.fontSize = `${fontSize}px`;
