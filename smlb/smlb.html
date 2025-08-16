@@ -24,6 +24,13 @@
             text-align: center;
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+
+
         }
 
         #header button {
@@ -126,9 +133,11 @@
 <body>
     <div id="header">
         <button onclick="funcShuffleCard()">카드 섞기</button>
+        <p id="pDrawTiles">뽑은 카드 수: 0장</p>
     </div>
     <div id="body"></div>
     <script>
+        let drawTiles = 0;
         let cardWidth = 80; // 줄어든 카드 너비
         let cardHeight = 120; // 줄어든 카드 높이
 
@@ -137,11 +146,14 @@
             let numID = Number(divId.replace('divCont', ''))
             if (curInfor["flips"][numID] == true) {
                 curInfor["flips"][numID] = false
+                drawTiles-=1
             } else {
                 curInfor["flips"][numID] = true
+                drawTiles+=1
             }
             document.getElementById(divId).classList.toggle('flipped');
             localStorage.setItem('morningm00n_smlb_card', JSON.stringify(curInfor))
+            document.getElementById('pDrawTiles').innerHTML = `뽑은 카드 수: ${drawTiles}장`
         }
 
         const elemBody = document.getElementById('body');
@@ -228,6 +240,7 @@
             cardContainers.forEach((card, i) => {
                 if (curInfor["flips"][i] == true) {
                     card.classList = 'container';
+                    drawTiles+=1
                 }
             })
 
@@ -245,7 +258,7 @@
                 }
             }, 800); // 0.8초 후 최종 이미지 변경
 
-
+            document.getElementById('pDrawTiles').innerHTML = `뽑은 카드 수: ${drawTiles}장`
 
         }
 
