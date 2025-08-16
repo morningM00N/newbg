@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슈퍼메가 럭키박스</title>
+    <style>
+        #body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body id="body">
+    <script>
+        function funcX() {
+            if (event.srcElement.innerHTML == "X") {
+                event.target.innerHTML = ""
+            } else {
+                event.target.innerHTML = "X"
+            }
+            let parent = event.target.parentElement
+            while (parent.id.includes("scoreCard") == false) {
+                parent = parent.parentElement
+            }
+            console.log(parent)
+        }
+
+        let cardInfor = [
+            "123456789q15sTm",
+            "555555554qq2sTm"
+        ]
+        let bonusAdValue = {
+            "q": 0,
+            "1": 1,
+            "2": 2,
+            "3": 3,
+            "4": 4,
+            "5": 5,
+            "6": 6,
+            "7": 7,
+            "8": 8,
+            "9": 9,
+            "s": 10,
+            "t": 11,
+            "T": 12,
+            "m": 13,
+            "e": 14
+        }
+        let factor = 3
+        function funcGetCard(id) {
+            let cardIdx = Math.floor(Math.random() * cardInfor.length)
+            console.log(cardIdx)
+            let scoreCard = document.createElement('div')
+            scoreCard.id = "scoreCard" + id
+            scoreCard.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.8)"
+            scoreCard.style.position = "relative"
+            scoreCard.style.width = `${750 / factor}px`
+            scoreCard.style.height = `${750 / factor}px`
+            scoreCard.style.backgroundImage = 'url(img/LuckyBox.webp)'
+            scoreCard.style.backgroundRepeat = 'no-repeat'
+            scoreCard.style.backgroundSize = `${750 / factor}px ${750 / factor * 2}px`
+            for (let index = 0; index < 9; index++) {
+                let btn = document.createElement('button')
+                scoreCard.appendChild(btn)
+                btn.id = `btn_${id}_${index}`
+                btn.style.backgroundColor = "transparent"
+                btn.style.border = "0px"
+                btn.style.position = "absolute"
+                btn.style.left = `${(65 + index % 3 * 172) / factor}px`
+                btn.style.top = `${(48 + Math.floor(index / 3) * 172) / factor}px`
+                btn.style.width = `${150 / factor}px`
+                btn.style.height = `${150 / factor}px`
+                btn.style.backgroundImage = "url('img/LuckyBox_numbers.webp')"
+                btn.style.backgroundSize = `${150 * 9 / factor}px ${2 * 150 / factor}px`
+                btn.style.fontSize = `${150 / factor}px`
+                btn.style.textAlign = 'center'
+                btn.onclick = funcX
+
+                btn.style.backgroundPositionX = `${-(cardInfor[cardIdx][index] - 1) * 150 / factor}px`
+
+            }
+
+            {
+                let delta = 179
+                let delta2 = 95
+                for (let index = 0; index < 3; index++) {
+                    let btn = document.createElement('button')
+                    scoreCard.appendChild(btn)
+                    btn.id = `btn_row_${id}_${index}`
+                    btn.style.border = "0px"
+                    btn.style.position = "absolute"
+                    btn.style.left = `${(577) / factor}px`
+                    btn.style.top = `${(30 + index * delta) / factor}px`
+                    btn.style.width = `${delta / factor}px`
+                    btn.style.height = `${delta / factor}px`
+                    btn.style.backgroundImage = "url('img/LuckyBox_row_bonus.webp')"
+                    btn.style.backgroundSize = `${delta / factor}px ${delta * 2 / factor}px`
+                    btn.style.backgroundColor = "transparent"
+
+
+                    let btn2 = document.createElement('button')
+                    btn.appendChild(btn2)
+                    btn2.id = `btn_row_bonus_${id}_${index}`
+                    btn2.style.border = "0px"
+                    btn2.style.position = "absolute"
+                    btn2.style.textAlign = 'center'
+                    btn2.onclick = funcX
+                    btn2.style.width = `${delta2 / factor}px`
+                    btn2.style.height = `${delta2 / factor}px`
+                    btn2.style.left = `${(45) / factor}px`
+                    btn2.style.top = `${(35) / factor}px`
+
+                    btn2.style.backgroundImage = "url('img/LuckyBox_bonus.webp')"
+                    btn2.style.backgroundSize = `${14 * delta2 / factor}px ${delta2 * 2.1 / factor}px`
+                    btn2.style.fontSize = `${delta2 / factor}px`
+                    let idxTemp = cardInfor[cardIdx][9 + index]
+                    btn2.style.backgroundPositionX = `${-bonusAdValue[idxTemp] * delta2 / factor}px`
+
+
+                }
+            }
+
+            {
+                let delta = 179
+                let delta2 = 95
+                for (let index = 0; index < 3; index++) {
+                    let btn = document.createElement('button')
+                    scoreCard.appendChild(btn)
+                    btn.id = `btn_row_${id}_${index}`
+                    btn.style.backgroundColor = "transparent"
+                    btn.style.border = "0px"
+                    btn.style.position = "absolute"
+                    btn.style.top = `${(560) / factor}px`
+                    btn.style.left = `${(40 + index * delta) / factor}px`
+                    btn.style.width = `${delta / factor}px`
+                    btn.style.height = `${delta / factor}px`
+                    btn.style.backgroundImage = "url('img/LuckyBox_col_bonus.webp')"
+                    btn.style.backgroundSize = `${delta / factor}px ${delta * 2 / factor}px`
+
+                    let btn2 = document.createElement('button')
+                    btn.appendChild(btn2)
+                    btn2.id = `btn_row_bonus_${id}_${index}`
+                    btn2.style.border = "0px"
+                    btn2.style.position = "absolute"
+                    btn2.style.textAlign = 'center'
+                    btn2.onclick = funcX
+                    btn2.style.width = `${delta2 / factor}px`
+                    btn2.style.height = `${delta2 / factor}px`
+                    btn2.style.left = `${(52) / factor}px`
+                    btn2.style.top = `${(35) / factor}px`
+
+                    btn2.style.backgroundImage = "url('img/LuckyBox_bonus.webp')"
+                    btn2.style.backgroundSize = `${14 * delta2 / factor}px ${delta2 * 2.1 / factor}px`
+                    btn2.style.fontSize = `${delta2 / factor}px`
+                    let idxTemp = cardInfor[cardIdx][12 + index]
+                    btn2.style.backgroundPositionX = `${-bonusAdValue[idxTemp] * delta2 / factor}px`
+
+                }
+            }
+            return scoreCard
+        }
+        document.getElementById("body").appendChild(funcGetCard(0))
+        document.getElementById("body").appendChild(funcGetCard(1))
+        document.getElementById("body").appendChild(funcGetCard(2))
+        document.getElementById("body").appendChild(funcGetCard(3))
+
+
+    </script>
+</body>
+
+</html>
