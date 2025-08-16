@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카드 뽑기 게임</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #header button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #header button:hover {
+            background-color: #4cae4c;
+        }
+
+        #body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 15px;
+            width: 90%;
+            max-width: 960px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 80px;
+            /* 카드 너비 줄임 */
+            height: 120px;
+            /* 카드 높이 줄임 */
+            cursor: pointer;
+            perspective: 600px;
+            /* 원근감 조절 */
+            margin: 5px;
+            transition: transform 0.3s ease-in-out;
+
+
+        }
+
+        .container.move-to-center {
+            transform: translate(var(--dx), var(--dy)) scale(0.8);
+            z-index: 100;
+        }
+
+        .container.move-back {
+            transform: translate(0, 0) scale(1);
+        }
+
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .container.flipped .flipper {
+            transform: rotateY(180deg);
+        }
+
+        .front,
+        .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url("img/Numbers_en.webp");
+            background-size: 800px 120px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 1);
+            /* 오른쪽, 아래로 2px씩 그림자, 흐림 정도 5px, 검정색 투명도 0.2 */
+
+            /* 줄어든 카드 크기에 맞춰 스프라이트 크기 조절 */
+        }
+
+        .front {
+            background-color: #eee;
+            transform: rotateY(0deg);
+        }
+
+        .back {
+            background-color: #eee;
+            transform: rotateY(180deg);
+            background-position: 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <button onclick="funcShuffleCard()">카드 섞기</button>
+    </div>
+    <div id="body"></div>
+    <script>
+        let cardWidth = 80; // 줄어든 카드 너비
+        let cardHeight = 120; // 줄어든 카드 높이
+
+        let curInfor = {}
+        function funcFlip(divId) {
+            let numID = Number(divId.replace('divCont', ''))
+            if (curInfor["flips"][numID] == true) {
+                curInfor["flips"][numID] = false
+            } else {
+                curInfor["flips"][numID] = true
+            }
+            document.getElementById(divId).classList.toggle('flipped');
+            localStorage.setItem('morningm00n_smlb_card', JSON.stringify(curInfor))
+        }
+
+        const elemBody = document.getElementById('body');
+        const cardContainers = [];
+
+        for (let i = 0; i < 18; i++) {
+            let div = document.createElement('div');
+            div.className = 'container';
+            div.id = 'divCont' + i;
+            elemBody.appendChild(div);
+            div.innerHTML = `<div class='flipper'><div class='front' id='front${i}'></div><div class='back'></div></div>`;
+            div.addEventListener('click', () => { funcFlip('divCont' + i) });
+            cardContainers.push(div);
+        }
+
+        curInfor["numbers"] = []
+        curInfor["flips"] = []
+
+
+        let storeData = localStorage.getItem('morningm00n_smlb_card')
+
+        while (storeData != null) {
+            let repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            if (repeatAns == true) {
+                let dictData = JSON.parse(storeData)
+                curInfor["numbers"] = dictData['numbers']
+                curInfor["flips"] = dictData['flips']
+                break
+            } else {
+                let repAns = confirm('새로운 게임을 시작하시겠습니까?')
+                if (repAns == true) {
+                    storeData = null
+                    flips = []
+                    curInfor["numbers"] = []
+                    localStorage.removeItem('morningm00n_smlb_card')            
+                }
+            }
+        }
+
+
+        function funcShuffleCard() {
+            localStorage.removeItem('morningm00n_smlb_card')            
+            curInfor["numbers"] = []
+            curInfor["flips"] = []
+            for (let index = 1; index <= 9; index++) {
+                curInfor["numbers"].push(index, index);
+            }
+            for (let index = curInfor["numbers"].length - 1; index > 0; index--) {
+                let idx = Math.floor(Math.random() * (index + 1));
+                let temp = curInfor["numbers"].pop();
+                curInfor["numbers"].splice(idx, 0, temp);
+            }
+
+            funcSetCard()
+        }
+
+        function funcSetCard() {
+            if (curInfor["numbers"].length == 0) {
+                for (let index = 1; index <= 9; index++) {
+                    curInfor["numbers"].push(index, index);
+                }
+                for (let index = curInfor["numbers"].length - 1; index > 0; index--) {
+                    let idx = Math.floor(Math.random() * (index + 1));
+                    let temp = curInfor["numbers"].pop();
+                    curInfor["numbers"].splice(idx, 0, temp);
+                }
+            }
+            const bodyRect = elemBody.getBoundingClientRect();
+            const centerLeft = bodyRect.width / 2 - cardWidth / 2;
+            const centerTop = bodyRect.height / 2 - cardHeight / 2;
+
+            cardContainers.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const dx = centerLeft - rect.left;
+                const dy = centerTop - rect.top;
+
+                card.classList.add('flipped');
+                card.style.setProperty('--dx', `${dx}px`);
+                card.style.setProperty('--dy', `${dy}px`);
+                card.style.transform = "translate(var(--dx), var(--dy)) scale(0.8)"
+
+            });
+
+            cardContainers.forEach((card, i) => {
+                if (curInfor["flips"][i] == true) {
+                    card.classList = 'container';
+                }
+            })
+
+            setTimeout(function () {
+                cardContainers.forEach((card, i) => {
+                    card.classList.remove('move-to-center');
+                    const randomRotation = Math.floor(Math.random() * 20) - 10;
+                    card.style.transform = `rotate(${randomRotation}deg)`;
+                });
+            }, 300); // 0.3초 후 흩어지는 애니메이션 시작
+
+            setTimeout(function () {
+                for (let i = 0; i < 18; i++) {
+                    document.getElementById('front' + i).style.backgroundPositionX = `${-curInfor["numbers"][i] * cardWidth}px`;
+                }
+            }, 800); // 0.8초 후 최종 이미지 변경
+
+
+
+        }
+
+        funcSetCard();
+    </script>
+</body>
+
+</html>
