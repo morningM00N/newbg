@@ -15,11 +15,8 @@
     </div>
     <script>
         function funcX() {
-            if (event.srcElement.innerHTML == "X") {
-                event.target.innerHTML = ""
-            } else {
-                event.target.innerHTML = "X"
-            }
+            let classChecked = event.target.classList[0] + "Checked"
+            event.target.classList.toggle(classChecked)
             let parent = event.target.parentElement
             while (parent.id.includes("scoreCard") == false) {
                 parent = parent.parentElement

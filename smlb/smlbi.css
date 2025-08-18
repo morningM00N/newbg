@@ -32,11 +32,15 @@
     background-color: transparent;
     background-image: url('img/LuckyBox_numbers.webp');
     background-size: calc(var(--sizeFactor) * 9px / var(--factor)) calc(2px * var(--sizeFactor) / var(--factor));
-    font-size: calc(var(--sizeFactor) * 1px / var(--factor));
-    text-align: center;
     left : calc((65px + var(--indexmod) * 172px) / var(--factor));
     top : calc((48px + var(--indexdivide) * 172px) / var(--factor));
     background-position-x: calc(-1px * (var(--index) - 1) * var(--sizeFactor) / var(--factor));
+}
+
+.numberBtnChecked{
+    background-image: url('img/xmark.png'), url('img/LuckyBox_numbers.webp');
+    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 1px / var(--factor)), calc(var(--sizeFactor) * 9px / var(--factor)) calc(2px * var(--sizeFactor) / var(--factor));
+    background-position-x: 0, calc(-1px * (var(--index) - 1) * var(--sizeFactor) / var(--factor));
 }
 
 .rowBonusContainer{
@@ -65,27 +69,29 @@
     --index : 0;
     border: 0px;
     position : absolute;
-    text-align: center;
     left: calc( 45px / var(--factor));
     top: calc( 35px / var(--factor));
     background-image: url('img/LuckyBox_bonus.webp');
     background-color: transparent;
-    font-size: calc(var(--sizeFactor) * 1px / var(--factor));
     background-size: calc(14px * var(--sizeFactor) / var(--factor)) calc(2.1px * var(--sizeFactor) / var(--factor));
     background-position-x: calc(-1px * var(--index) * var(--sizeFactor) / var(--factor));
 }
+
 
 .colBonus{
     --index : 0;
     border: 0px;
     position : absolute;
-    text-align: center;
     left: calc( 52px / var(--factor));
     top: calc( 35px / var(--factor));
     background-image: url('img/LuckyBox_bonus.webp');
     background-color: transparent;
-    font-size: calc(var(--sizeFactor) * 1px / var(--factor));
     background-size: calc(14px * var(--sizeFactor) / var(--factor)) calc(2.1px * var(--sizeFactor) / var(--factor));
     background-position-x: calc(-1px * var(--index) * var(--sizeFactor) / var(--factor));
 }
 
+.rowBonusChecked, .colBonusChecked{
+    background-image: url('img/xmark.png'), url('img/LuckyBox_bonus.webp');
+    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 1px / var(--factor)), calc(14px * var(--sizeFactor) / var(--factor)) calc(2.1px * var(--sizeFactor) / var(--factor));
+    background-position-x: 0px, calc(-1px * var(--index) * var(--sizeFactor) / var(--factor));
+}
