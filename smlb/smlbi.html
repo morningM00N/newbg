@@ -5,20 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>슈퍼메가 럭키박스</title>
-    <style>
-        #body {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="smlbi.css">
 </head>
 
-<body id="body">
+<body>
+    <div style="height:200px;"></div>
+    <div></div>
+    <div id="playArea">
+    </div>
     <script>
         function funcX() {
             if (event.srcElement.innerHTML == "X") {
@@ -54,125 +48,75 @@
             "m": 13,
             "e": 14
         }
-        let factor = 3
+        let factor = 4
+
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)
             console.log(cardIdx)
             let scoreCard = document.createElement('div')
             scoreCard.id = "scoreCard" + id
-            scoreCard.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.8)"
-            scoreCard.style.position = "relative"
-            scoreCard.style.width = `${750 / factor}px`
-            scoreCard.style.height = `${750 / factor}px`
-            scoreCard.style.backgroundImage = 'url(img/LuckyBox.webp)'
-            scoreCard.style.backgroundRepeat = 'no-repeat'
-            scoreCard.style.backgroundSize = `${750 / factor}px ${750 / factor * 2}px`
+            scoreCard.style.setProperty("--factor", factor)
+            scoreCard.style.setProperty("--sizeFactor", "750")
+            scoreCard.className = "scoreCard"
             for (let index = 0; index < 9; index++) {
                 let btn = document.createElement('button')
+                btn.style.setProperty("--factor", factor)
+                btn.style.setProperty("--index", cardInfor[cardIdx][index])
+                btn.style.setProperty("--indexmod", index % 3)
+                btn.style.setProperty("--indexdivide", Math.floor(index / 3))
+                btn.style.setProperty("--sizeFactor", "150")
+                btn.className = "numberBtn"
                 scoreCard.appendChild(btn)
                 btn.id = `btn_${id}_${index}`
-                btn.style.backgroundColor = "transparent"
-                btn.style.border = "0px"
-                btn.style.position = "absolute"
-                btn.style.left = `${(65 + index % 3 * 172) / factor}px`
-                btn.style.top = `${(48 + Math.floor(index / 3) * 172) / factor}px`
-                btn.style.width = `${150 / factor}px`
-                btn.style.height = `${150 / factor}px`
-                btn.style.backgroundImage = "url('img/LuckyBox_numbers.webp')"
-                btn.style.backgroundSize = `${150 * 9 / factor}px ${2 * 150 / factor}px`
-                btn.style.fontSize = `${150 / factor}px`
-                btn.style.textAlign = 'center'
                 btn.onclick = funcX
-
-                btn.style.backgroundPositionX = `${-(cardInfor[cardIdx][index] - 1) * 150 / factor}px`
-
             }
 
-            {
-                let delta = 179
-                let delta2 = 95
-                for (let index = 0; index < 3; index++) {
-                    let btn = document.createElement('button')
-                    scoreCard.appendChild(btn)
-                    btn.id = `btn_row_${id}_${index}`
-                    btn.style.border = "0px"
-                    btn.style.position = "absolute"
-                    btn.style.left = `${(577) / factor}px`
-                    btn.style.top = `${(30 + index * delta) / factor}px`
-                    btn.style.width = `${delta / factor}px`
-                    btn.style.height = `${delta / factor}px`
-                    btn.style.backgroundImage = "url('img/LuckyBox_row_bonus.webp')"
-                    btn.style.backgroundSize = `${delta / factor}px ${delta * 2 / factor}px`
-                    btn.style.backgroundColor = "transparent"
 
+            for (let index = 0; index < 3; index++) {
+                let btn = document.createElement('button')
+                scoreCard.appendChild(btn)
+                btn.id = `btn_row_${id}_${index}`
+                btn.className = "rowBonusContainer"
+                btn.style.setProperty("--factor", factor)
+                btn.style.setProperty("--index", index)
+                btn.style.setProperty("--sizeFactor", "179")
 
-                    let btn2 = document.createElement('button')
-                    btn.appendChild(btn2)
-                    btn2.id = `btn_row_bonus_${id}_${index}`
-                    btn2.style.border = "0px"
-                    btn2.style.position = "absolute"
-                    btn2.style.textAlign = 'center'
-                    btn2.onclick = funcX
-                    btn2.style.width = `${delta2 / factor}px`
-                    btn2.style.height = `${delta2 / factor}px`
-                    btn2.style.left = `${(45) / factor}px`
-                    btn2.style.top = `${(35) / factor}px`
-
-                    btn2.style.backgroundImage = "url('img/LuckyBox_bonus.webp')"
-                    btn2.style.backgroundSize = `${14 * delta2 / factor}px ${delta2 * 2.1 / factor}px`
-                    btn2.style.fontSize = `${delta2 / factor}px`
-                    let idxTemp = cardInfor[cardIdx][9 + index]
-                    btn2.style.backgroundPositionX = `${-bonusAdValue[idxTemp] * delta2 / factor}px`
-
-
-                }
+                let btn2 = document.createElement('button')
+                btn.appendChild(btn2)
+                btn2.id = `btn_row_bonus_${id}_${index}`
+                btn2.className = "rowBonus"
+                btn2.style.setProperty("--factor", factor)
+                btn2.style.setProperty("--sizeFactor", 95)
+                btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][9 + index]])
+                btn2.onclick = funcX
             }
 
-            {
-                let delta = 179
-                let delta2 = 95
-                for (let index = 0; index < 3; index++) {
-                    let btn = document.createElement('button')
-                    scoreCard.appendChild(btn)
-                    btn.id = `btn_row_${id}_${index}`
-                    btn.style.backgroundColor = "transparent"
-                    btn.style.border = "0px"
-                    btn.style.position = "absolute"
-                    btn.style.top = `${(560) / factor}px`
-                    btn.style.left = `${(40 + index * delta) / factor}px`
-                    btn.style.width = `${delta / factor}px`
-                    btn.style.height = `${delta / factor}px`
-                    btn.style.backgroundImage = "url('img/LuckyBox_col_bonus.webp')"
-                    btn.style.backgroundSize = `${delta / factor}px ${delta * 2 / factor}px`
 
-                    let btn2 = document.createElement('button')
-                    btn.appendChild(btn2)
-                    btn2.id = `btn_row_bonus_${id}_${index}`
-                    btn2.style.border = "0px"
-                    btn2.style.position = "absolute"
-                    btn2.style.textAlign = 'center'
-                    btn2.onclick = funcX
-                    btn2.style.width = `${delta2 / factor}px`
-                    btn2.style.height = `${delta2 / factor}px`
-                    btn2.style.left = `${(52) / factor}px`
-                    btn2.style.top = `${(35) / factor}px`
+            for (let index = 0; index < 3; index++) {
+                let btn = document.createElement('button')
+                scoreCard.appendChild(btn)
+                btn.id = `btn_col_${id}_${index}`
+                btn.style.setProperty("--factor", factor)
+                btn.style.setProperty("--sizeFactor", 179)
+                btn.style.setProperty("--index", index)
+                btn.className = "colBonusContainer"
 
-                    btn2.style.backgroundImage = "url('img/LuckyBox_bonus.webp')"
-                    btn2.style.backgroundSize = `${14 * delta2 / factor}px ${delta2 * 2.1 / factor}px`
-                    btn2.style.fontSize = `${delta2 / factor}px`
-                    let idxTemp = cardInfor[cardIdx][12 + index]
-                    btn2.style.backgroundPositionX = `${-bonusAdValue[idxTemp] * delta2 / factor}px`
+                let btn2 = document.createElement('button')
+                btn.appendChild(btn2)
+                btn2.id = `btn_col_bonus_${id}_${index}`
+                btn2.className = "colBonus"
+                btn2.onclick = funcX
+                btn2.style.setProperty("--factor", factor)
+                btn2.style.setProperty("--sizeFactor", 95)
+                btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][12 + index]])
 
-                }
             }
             return scoreCard
         }
-        document.getElementById("body").appendChild(funcGetCard(0))
-        document.getElementById("body").appendChild(funcGetCard(1))
-        document.getElementById("body").appendChild(funcGetCard(2))
-        document.getElementById("body").appendChild(funcGetCard(3))
-
-
+        document.getElementById("playArea").appendChild(funcGetCard(0))
+        document.getElementById("playArea").appendChild(funcGetCard(1))
+        document.getElementById("playArea").appendChild(funcGetCard(2))
+        document.getElementById("playArea").appendChild(funcGetCard(3))
     </script>
 </body>
 
