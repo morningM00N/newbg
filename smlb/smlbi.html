@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    <div style="height:200px;"></div>
+    <div class = "indCard"></div>
     <div></div>
     <div id="playArea">
     </div>
     <script>
+        console.log('현재 뷰포트 너비(px):', document.documentElement.clientWidth);
+
         function funcX() {
             let classChecked = event.target.classList[0] + "Checked"
             event.target.classList.toggle(classChecked)
@@ -45,7 +47,7 @@
             "m": 13,
             "e": 14
         }
-        let factor = 4
+        let factor = Math.max(750/500,750/document.documentElement.clientWidth)
 
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)

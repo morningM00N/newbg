@@ -3,9 +3,9 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 1px;
 }
 
 .scoreCard, .numberBtn, .rowBonusContainer, .rowBonus, .colBonusContainer, .colBonus{
@@ -38,8 +38,8 @@
 }
 
 .numberBtnChecked{
-    background-image: url('img/xmark.png'), url('img/LuckyBox_numbers.webp');
-    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 1px / var(--factor)), calc(var(--sizeFactor) * 9px / var(--factor)) calc(2px * var(--sizeFactor) / var(--factor));
+    background-image: url('img/cross.webp'), url('img/LuckyBox_numbers.webp');
+    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 2px / var(--factor)), calc(var(--sizeFactor) * 9px / var(--factor)) calc(2px * var(--sizeFactor) / var(--factor));
     background-position-x: 0, calc(-1px * (var(--index) - 1) * var(--sizeFactor) / var(--factor));
 }
 
@@ -91,7 +91,17 @@
 }
 
 .rowBonusChecked, .colBonusChecked{
-    background-image: url('img/xmark.png'), url('img/LuckyBox_bonus.webp');
-    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 1px / var(--factor)), calc(14px * var(--sizeFactor) / var(--factor)) calc(2.1px * var(--sizeFactor) / var(--factor));
+    background-image: url('img/cross.webp'), url('img/LuckyBox_bonus.webp');
+    background-size: calc(var(--sizeFactor) * 1px / var(--factor)) calc(var(--sizeFactor) * 2px / var(--factor)), calc(14px * var(--sizeFactor) / var(--factor)) calc(2.1px * var(--sizeFactor) / var(--factor));
     background-position-x: 0px, calc(-1px * var(--index) * var(--sizeFactor) / var(--factor));
+}
+
+.indCard{
+    border:0px;
+    margin:0px;
+    padding:0px;
+    width : min(100vw,200px);
+    height: calc(min(100vw,200px)*1453/2035);
+    background-image: url('img/Scorecard_en.webp');
+    background-size: min(100vw,200px) calc(min(100vw,200px)*1453/2035);
 }

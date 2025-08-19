@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+        }
+
+        #mainDiv {
+            width: calc(421px * var(--factor));
+            height: calc(600px * var(--factor));
+            position: relative;
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            background-color: white;
+            background-image: url('img/image.png');
+            background-size: calc(421px * var(--factor)) calc(600px * var(--factor));
+        }
+
+        .xMarkBtn {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            background-color: lightgray;
+            position: absolute;
+            font-size: calc(1px * var(--fontSize) * var(--factor));
+            width: calc(1px * var(--widthSize) * var(--factor));
+            height: calc(1px * var(--heightSize) * var(--factor));
+            left: calc(1px * (var(--leftOffset) + var(--leftStep) * var(--leftIdx)) * var(--factor));
+            top: calc(1px * (var(--topOffset) + var(--topStep) * var(--topIdx)) * var(--factor));
+        }
+
+        .xMarked {
+            background-image: url(img/cross.webp);
+            background-size: calc(1px * var(--widthSize) * var(--factor)) calc(2px * var(--widthSize) * var(--factor));
+            animation: wipe-in 0.2s ease-in forwards;
+        }
+
+        @keyframes wipe-in {
+            from {
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0% 0%);
+            }
+
+            to {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mainDiv">
+    </div>
+    <script>
+
+
+        function clickXMarkBtn(event, btn) {
+            console.log(btn)
+            btn.classList.toggle('xMarked')
+            if (btn.id in storeData) {
+                delete storeData[btn.id]
+            } else {
+                storeData[btn.id] = true
+            }
+            console.log(storeData)
+            localStorage.setItem('morningm00n_gants', JSON.stringify(storeData))
+        }
+
+        function clickNumberBtn(event, btn) {
+            console.log(btn)
+            if (Number(btn.innerHTML)>=1 && Number(btn.innerHTML)<6){
+                btn.innerHTML = Number(btn.innerHTML)+1
+                storeData[btn.id] = Number(btn.innerHTML)
+            } else if (Number(btn.innerHTML)==6) {
+                btn.innerHTML = ""
+                delete storeData[btn.id]
+            } else{
+                btn.innerHTML = 1
+                storeData[btn.id] = Number(btn.innerHTML)
+            }
+            console.log(storeData)
+            localStorage.setItem('morningm00n_gants', JSON.stringify(storeData))
+        }
+
+        let factor = Math.min(document.documentElement.clientWidth / 421, document.documentElement.clientHeight / 600)
+        let mainDiv = document.getElementById("mainDiv")
+        mainDiv.style.setProperty("--factor", factor)
+
+        // round area
+        for (let index = 0; index < 6; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `round_${index}`
+            btn.style.setProperty("--factor", factor)
+            btn.style.setProperty("--widthSize", 50)
+            btn.style.setProperty("--heightSize", 50)
+            btn.style.setProperty("--leftOffset", 100)
+            btn.style.setProperty("--leftStep", 70)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 100)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickXMarkBtn(event, btn)
+        }
+        // bonus area
+        for (let index = 0; index < 6; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `orange_${index}`
+            btn.style.setProperty("--factor", factor)
+            btn.style.setProperty("--fontSize", 50)
+            btn.style.setProperty("--widthSize", 50)
+            btn.style.setProperty("--heightSize", 50)
+            btn.style.setProperty("--leftOffset", 100)
+            btn.style.setProperty("--leftStep", 70)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 200)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickNumberBtn(event, btn)
+        }        
+        // yellow area
+        // blue area
+        // green area
+        // orange area
+        // purple area
+        // score area
+
+
+        let storeData = localStorage.getItem('morningm00n_gants')
+
+        while (storeData != null) {
+            let repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            if (repeatAns == true) {
+                storeData = JSON.parse(storeData)
+                for (const [key, val] of Object.entries(storeData)) {
+                    let btn = document.getElementById(key)
+                    if (typeof(val)=='boolean'){
+                        btn.classList.toggle('xMarked')
+                    }
+                    else{
+                        btn.innerHTML=val
+                    }
+                }
+                break
+            } else {
+                let repAns = confirm('새로운 게임을 시작하시겠습니까?')
+                if (repAns == true) {
+                    storeData = null
+                    localStorage.removeItem('morningm00n_gants')
+                }
+            }
+        }
+
+        if (storeData == null) {
+            storeData = {}
+        }
+
+    </script>
+</body>
+
+</html>
