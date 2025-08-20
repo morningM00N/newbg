@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class = "indCard"></div>
+    <div id = "indArea" class = "indCard"></div>
     <div></div>
     <div id="playArea">
     </div>
@@ -47,7 +47,10 @@
             "m": 13,
             "e": 14
         }
-        let factor = Math.max(750/500,750/document.documentElement.clientWidth)
+        let factor = Math.max(750/500,750/(0.95*document.documentElement.clientWidth))
+
+        document.getElementById("indArea").style.setProperty("--factor",factor)
+        document.getElementById("indArea").style.setProperty("--sizeFactor",750)
 
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)
