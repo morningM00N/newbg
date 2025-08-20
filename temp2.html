@@ -8,9 +8,20 @@
 <body>
     <div>
         <p id="pID"></p>
+        <button onclick=fucnFull()>전체화면</button>
     </div>
 </body>
 <script>
     document.getElementById('pID').innerHTML=`${document.documentElement.clientHeight}<br>${document.documentElement.clientWidth}`
+    function fucnFull(){
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+        setTimeout(function(){
+            document.getElementById('pID').innerHTML=`${document.documentElement.clientHeight}<br>${document.documentElement.clientWidth}`
+        },1000)
+    }
 </script>
 </html>
