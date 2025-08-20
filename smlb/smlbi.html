@@ -13,15 +13,31 @@
         <summary>Score</summary>
         <div id="indArea" class="indCard"></div>
     </details>
-    <div></div>
+    <div id="newComponent"></div>
     <div id="playArea">
         <div style="width:100vw;align-items:center;justify-content:center;flex-wrap:wrap;display:flex;">
-        size: <input style="width:200px;" id="inputRange" type="range" step="0.001" onchange="funcSizeChange(this)">
+            size: <input style="width:200px;" id="inputRange" type="range" step="0.001" onchange="funcSizeChange(this)">
         </div>
     </div>
     <script>
-        function funcSizeChange(sliderElement){
-            document.documentElement.style.setProperty("--factor", 1/sliderElement.value)
+
+        let storeData = {}
+        storeData["usedCard"] = {}
+        function funcAddCard(numOfCards){
+            let newComponent = document.getElementById("newComponent")
+            for (let index = 0; index < numOfCards; index++) {
+                let cardIdx = Math.floor(Math.random() * cardInfor.length)
+                while (cardIdx in storeData["usedCard"]==true){
+                    cardIdx = Math.floor(Math.random() * cardInfor.length)
+                }
+                storeData["usedCard"][cardIdx]=true
+                let newCard = funcGetCard(cardIdx)
+                newCard.id = "newCard"+index
+                newComponent.appendChild(newCard)
+            }
+        }
+        function funcSizeChange(sliderElement) {
+            document.documentElement.style.setProperty("--factor", 1 / sliderElement.value)
         }
 
         function funcX() {
@@ -36,36 +52,30 @@
 
         let cardInfor = [
             "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
             "555555554qq2sTm"
         ]
         let bonusAdValue = {
-            "q": 0,
-            "1": 1,
-            "2": 2,
-            "3": 3,
-            "4": 4,
-            "5": 5,
-            "6": 6,
-            "7": 7,
-            "8": 8,
-            "9": 9,
-            "s": 10,
-            "t": 11,
-            "T": 12,
-            "m": 13,
-            "e": 14
+            "q": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
+            "8": 8, "9": 9, "s": 10, "t": 11, "T": 12, "m": 13, "e": 14
         }
         let factor = 750 / (0.95 * document.documentElement.clientWidth)
 
-        document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth)/750
-        document.getElementById('inputRange').min = 50/750
+        document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth) / 750
+        document.getElementById('inputRange').min = 50 / 750
 
         document.documentElement.style.setProperty("--factor", factor)
         document.getElementById("indArea").style.setProperty("--sizeFactor", 750)
 
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)
-            console.log(cardIdx)
             let scoreCard = document.createElement('div')
             scoreCard.id = "scoreCard" + id
             scoreCard.style.setProperty("--sizeFactor", "750")
@@ -120,6 +130,133 @@
             }
             return scoreCard
         }
+
+        let indArea = document.getElementById('indArea')
+        let roundOffset = 10
+        let roundStep = 10
+        for (let round = 0; round < 3; round++) {
+            let btn = document.createElement('button')
+            indArea.appendChild(btn)
+            btn.className = "fixSizeElem"
+            btn.id = "round_" + round
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 8)
+            btn.style.setProperty("--leftStep", 0)
+            btn.style.setProperty("--leftIdx", 0)
+            btn.style.setProperty("--topOffset", roundOffset)
+            btn.style.setProperty("--topStep", roundStep)
+            btn.style.setProperty("--topIdx", round)
+            btn.onclick=function(){
+                funcAddCard(6)
+            }
+
+            let inp = document.createElement('input')
+            indArea.appendChild(inp)
+            inp.className = "fixSizeElem"
+            inp.id = "round_" + round
+            let properties_round = {
+                "--fontSize": 0.5,
+                "--widthSize": 10,
+                "--heightSize": 10,
+                "--leftOffset": 80,
+                "--leftStep": 0,
+                "--leftIdx": 0,
+                "--topOffset": roundOffset,
+                "--topStep": roundStep,
+                "--topIdx": round,
+            }
+            funcSetElementProperties(inp, properties_round)
+            inp.value = "20"
+
+            for (let index = 0; index < 3; index++) {
+                let btn = document.createElement('button')
+                indArea.appendChild(btn)
+                btn.className = "fixSizeElem"
+                btn.id = "complete_" + round + index
+                btn.style.setProperty("--widthSize", 7)
+                btn.style.setProperty("--heightSize", 10)
+                btn.style.setProperty("--leftOffset", 20)
+                btn.style.setProperty("--leftStep", 8)
+                btn.style.setProperty("--leftIdx", index)
+                btn.style.setProperty("--topOffset", roundOffset)
+                btn.style.setProperty("--topStep", roundStep)
+                btn.style.setProperty("--topIdx", round)
+                btn.style.setProperty("--fontSize", 0.5)
+                if (index == 0) {
+                    btn.innerHTML = "-"
+                    btn.onclick = function () {
+                        let targetBtn = document.getElementById('complete_' + round + "1")
+                        if (targetBtn.innerHTML == 1 || targetBtn.innerHTML == "") {
+                            targetBtn.innerHTML = ""
+                        } else {
+                            targetBtn.innerHTML = Number(targetBtn.innerHTML) - 1
+                        }
+                    }
+                }
+                if (index == 2) {
+                    btn.innerHTML = "+"
+                    btn.onclick = function () {
+                        let targetBtn = document.getElementById('complete_' + round + "1")
+                        if (targetBtn.innerHTML == "") {
+                            targetBtn.innerHTML = 1
+                        } else {
+                            targetBtn.innerHTML = Number(targetBtn.innerHTML) + 1
+                        }
+                    }
+
+                }
+            }
+
+            for (let index = 0; index < 3; index++) {
+                let btn = document.createElement('button')
+                indArea.appendChild(btn)
+                btn.className = "fixSizeElem"
+                btn.id = "star_" + round
+                let properties_star = {
+                    "--widthSize": 7,
+                    "--heightSize": 7,
+                    "--leftOffset": 50,
+                    "--leftStep": 8,
+                    "--leftIdx": index,
+                    "--topOffset": roundOffset,
+                    "--topStep": roundStep,
+                    "--topIdx": round,
+                }
+                funcSetElementProperties(btn, properties_star)
+                btn.onclick = function () {
+                    event.target.classList.toggle("xMarked")
+                }
+            }
+
+        }
+
+        let btn = document.createElement('button')
+        indArea.appendChild(btn)
+        btn.className = "fixSizeElem"
+        btn.id = "total_score"
+        let properties_total_score = {
+            "--widthSize": 7,
+            "--heightSize": 10,
+            "--leftOffset": 80,
+            "--leftStep": 0,
+            "--leftIdx": 0,
+            "--topOffset": 50,
+            "--topStep": 0,
+            "--topIdx": 0,
+        }
+        funcSetElementProperties(btn, properties_total_score)
+        btn.onclick = function () {
+            // compute total score
+            console.log(event.target)
+        }
+
+        function funcSetElementProperties(elem, properties) {
+            for (const property in properties) {
+                elem.style.setProperty(property, properties[property])
+            }
+        }
+
         document.getElementById("playArea").appendChild(funcGetCard(0))
         document.getElementById("playArea").appendChild(funcGetCard(1))
         document.getElementById("playArea").appendChild(funcGetCard(2))
