@@ -9,12 +9,20 @@
 </head>
 
 <body>
-    <div id = "indArea" class = "indCard"></div>
+    <details open>
+        <summary>Score</summary>
+        <div id="indArea" class="indCard"></div>
+    </details>
     <div></div>
     <div id="playArea">
+        <div style="width:100vw;align-items:center;justify-content:center;flex-wrap:wrap;display:flex;">
+        size: <input style="width:200px;" id="inputRange" type="range" step="0.001" onchange="funcSizeChange(this)">
+        </div>
     </div>
     <script>
-        console.log('현재 뷰포트 너비(px):', document.documentElement.clientWidth);
+        function funcSizeChange(sliderElement){
+            document.documentElement.style.setProperty("--factor", 1/sliderElement.value)
+        }
 
         function funcX() {
             let classChecked = event.target.classList[0] + "Checked"
@@ -47,22 +55,23 @@
             "m": 13,
             "e": 14
         }
-        let factor = Math.max(750/500,750/(0.95*document.documentElement.clientWidth))
+        let factor = 750 / (0.95 * document.documentElement.clientWidth)
 
-        document.getElementById("indArea").style.setProperty("--factor",factor)
-        document.getElementById("indArea").style.setProperty("--sizeFactor",750)
+        document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth)/750
+        document.getElementById('inputRange').min = 50/750
+
+        document.documentElement.style.setProperty("--factor", factor)
+        document.getElementById("indArea").style.setProperty("--sizeFactor", 750)
 
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)
             console.log(cardIdx)
             let scoreCard = document.createElement('div')
             scoreCard.id = "scoreCard" + id
-            scoreCard.style.setProperty("--factor", factor)
             scoreCard.style.setProperty("--sizeFactor", "750")
             scoreCard.className = "scoreCard"
             for (let index = 0; index < 9; index++) {
                 let btn = document.createElement('button')
-                btn.style.setProperty("--factor", factor)
                 btn.style.setProperty("--index", cardInfor[cardIdx][index])
                 btn.style.setProperty("--indexmod", index % 3)
                 btn.style.setProperty("--indexdivide", Math.floor(index / 3))
@@ -79,7 +88,6 @@
                 scoreCard.appendChild(btn)
                 btn.id = `btn_row_${id}_${index}`
                 btn.className = "rowBonusContainer"
-                btn.style.setProperty("--factor", factor)
                 btn.style.setProperty("--index", index)
                 btn.style.setProperty("--sizeFactor", "179")
 
@@ -87,7 +95,6 @@
                 btn.appendChild(btn2)
                 btn2.id = `btn_row_bonus_${id}_${index}`
                 btn2.className = "rowBonus"
-                btn2.style.setProperty("--factor", factor)
                 btn2.style.setProperty("--sizeFactor", 95)
                 btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][9 + index]])
                 btn2.onclick = funcX
@@ -98,7 +105,6 @@
                 let btn = document.createElement('button')
                 scoreCard.appendChild(btn)
                 btn.id = `btn_col_${id}_${index}`
-                btn.style.setProperty("--factor", factor)
                 btn.style.setProperty("--sizeFactor", 179)
                 btn.style.setProperty("--index", index)
                 btn.className = "colBonusContainer"
@@ -108,7 +114,6 @@
                 btn2.id = `btn_col_bonus_${id}_${index}`
                 btn2.className = "colBonus"
                 btn2.onclick = funcX
-                btn2.style.setProperty("--factor", factor)
                 btn2.style.setProperty("--sizeFactor", 95)
                 btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][12 + index]])
 
