@@ -116,7 +116,8 @@ body{
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-    background-color: lightgray;
+    background-color: black;
+    opacity: 0.3;
     position: absolute;
     font-size: calc(var(--fontSize) * 10vw);
     width: calc(var(--widthSize) * 1vw);

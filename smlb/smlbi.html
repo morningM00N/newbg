@@ -13,7 +13,9 @@
         <summary>Score</summary>
         <div id="indArea" class="indCard"></div>
     </details>
-    <div id="newComponent"></div>
+    <div id="newComponent" style="display:none;">
+        <p style="width:100vw;text-align: center;">choose:</p>
+    </div>
     <div id="playArea">
         <div style="width:100vw;align-items:center;justify-content:center;flex-wrap:wrap;display:flex;">
             size: <input style="width:200px;" id="inputRange" type="range" step="0.001" onchange="funcSizeChange(this)">
@@ -21,19 +23,48 @@
     </div>
     <script>
 
+        let remainCards = 0
         let storeData = {}
         storeData["usedCard"] = {}
-        function funcAddCard(numOfCards){
+        function funcAddCard(numOfCards) {
+            if (numOfCards == 5) { remainCards = 3 }
+            else { remainCards = 1 }
+
             let newComponent = document.getElementById("newComponent")
+            newComponent.style.display = "flex"
+            let factor = 750 / (0.30 * document.documentElement.clientWidth)
             for (let index = 0; index < numOfCards; index++) {
                 let cardIdx = Math.floor(Math.random() * cardInfor.length)
-                while (cardIdx in storeData["usedCard"]==true){
+                while (cardIdx in storeData["usedCard"] == true) {
                     cardIdx = Math.floor(Math.random() * cardInfor.length)
                 }
-                storeData["usedCard"][cardIdx]=true
+                storeData["usedCard"][cardIdx] = true
                 let newCard = funcGetCard(cardIdx)
-                newCard.id = "newCard"+index
+                newCard.style.setProperty("--factor", factor)
+                newCard.id = "newCard" + index
                 newComponent.appendChild(newCard)
+                newCard.addEventListener('click', (event) => {
+                    let elem = event.target
+                    while (elem.id.includes("newCard") == false) {
+                        elem = elem.parentElement
+                    }
+                    console.log(elem, cardIdx)
+                    let ans = confirm(`${Number(elem.id.replace('newCard', '')) + 1}번째 카드를 고르겠습니까?`)
+                    if (ans == true) {
+                        --remainCards
+                        newComponent.removeChild(elem)
+                        document.getElementById('playArea').appendChild(funcGetCard(cardIdx))
+                        if (remainCards == 0) {
+                            while (newComponent.childElementCount > 1) {
+                                newComponent.removeChild(newComponent.lastChild)
+                            }
+                            newComponent.style.display = "none"
+                        }
+                    } else {
+
+                    }
+                    event.stopPropagation();
+                }, true)
             }
         }
         function funcSizeChange(sliderElement) {
@@ -51,6 +82,19 @@
         }
 
         let cardInfor = [
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
             "123456789q15sTm",
             "123456789q15sTm",
             "123456789q15sTm",
@@ -132,9 +176,9 @@
         }
 
         let indArea = document.getElementById('indArea')
-        let roundOffset = 10
-        let roundStep = 10
-        for (let round = 0; round < 3; round++) {
+        let roundOffset = 7.5
+        let roundStep = 14.5
+        for (let round = 0; round < 4; round++) {
             let btn = document.createElement('button')
             indArea.appendChild(btn)
             btn.className = "fixSizeElem"
@@ -147,27 +191,33 @@
             btn.style.setProperty("--topOffset", roundOffset)
             btn.style.setProperty("--topStep", roundStep)
             btn.style.setProperty("--topIdx", round)
-            btn.onclick=function(){
-                funcAddCard(6)
+            btn.onclick = function () {
+                let res = confirm(`${round + 1} 라운드를 시작하겠습니까?`)
+                if (res == true) {
+                    if (round == 0) { funcAddCard(5) }
+                    else { funcAddCard(3) }
+                }
             }
 
-            let inp = document.createElement('input')
-            indArea.appendChild(inp)
-            inp.className = "fixSizeElem"
-            inp.id = "round_" + round
-            let properties_round = {
-                "--fontSize": 0.5,
-                "--widthSize": 10,
-                "--heightSize": 10,
-                "--leftOffset": 80,
-                "--leftStep": 0,
-                "--leftIdx": 0,
-                "--topOffset": roundOffset,
-                "--topStep": roundStep,
-                "--topIdx": round,
+            if (round < 3) {
+                let inp = document.createElement('input')
+                indArea.appendChild(inp)
+                inp.className = "fixSizeElem"
+                inp.id = "score_" + round
+                let properties_round = {
+                    "--fontSize": 0.5,
+                    "--widthSize": 10,
+                    "--heightSize": 10,
+                    "--leftOffset": 80,
+                    "--leftStep": 0,
+                    "--leftIdx": 0,
+                    "--topOffset": roundOffset,
+                    "--topStep": roundStep,
+                    "--topIdx": round,
+                }
+                funcSetElementProperties(inp, properties_round)
+                inp.value = "20"
             }
-            funcSetElementProperties(inp, properties_round)
-            inp.value = "20"
 
             for (let index = 0; index < 3; index++) {
                 let btn = document.createElement('button')
@@ -256,11 +306,6 @@
                 elem.style.setProperty(property, properties[property])
             }
         }
-
-        document.getElementById("playArea").appendChild(funcGetCard(0))
-        document.getElementById("playArea").appendChild(funcGetCard(1))
-        document.getElementById("playArea").appendChild(funcGetCard(2))
-        document.getElementById("playArea").appendChild(funcGetCard(3))
     </script>
 </body>
 
