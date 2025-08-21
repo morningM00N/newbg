@@ -254,7 +254,6 @@
                             targetBtn.innerHTML = Number(targetBtn.innerHTML) + 1
                         }
                     }
-
                 }
             }
 
@@ -262,7 +261,7 @@
                 let btn = document.createElement('button')
                 indArea.appendChild(btn)
                 btn.className = "fixSizeElem"
-                btn.id = "star_" + round
+                btn.id = "star_" + round + index
                 let properties_star = {
                     "--widthSize": 7,
                     "--heightSize": 7,
@@ -271,14 +270,13 @@
                     "--leftIdx": index,
                     "--topOffset": roundOffset,
                     "--topStep": roundStep,
-                    "--topIdx": round,
+                    "--topIdx": round
                 }
                 funcSetElementProperties(btn, properties_star)
                 btn.onclick = function () {
                     event.target.classList.toggle("xMarked")
                 }
             }
-
         }
 
         let btn = document.createElement('button')
@@ -294,11 +292,39 @@
             "--topOffset": 50,
             "--topStep": 0,
             "--topIdx": 0,
+            "--fontSize":0.5
         }
         funcSetElementProperties(btn, properties_total_score)
         btn.onclick = function () {
+            let completeScore = [15,12,10,8]
+            let finalScore = 0
+            for (let index = 0; index < 4; index++) {
+                console.log(document.getElementById('complete_' + index + '1').innerHTML)
+                finalScore += completeScore[index] * Number(`${document.getElementById('complete_' + index + '1').innerHTML}`)                          
+            }
+
+            let starScore = 0
+            let starScoreArr=[1,4,9]
+            for (let round = 0; round < 3; round++) {
+                for (let index = 2; index >=0 ; index--) {
+                    if (document.getElementById("star_"+round+index).classList.contains("xMarked") == true){
+                        starScore += starScoreArr[index]
+                        break
+                    }
+                }
+                
+            }
+
+            document.getElementById('score_0').value = starScore;
+
+            for (let index = 0; index < 3; index++) {
+                finalScore += Number(`${document.getElementById('score_' + index).value}`)                          
+            }
+
+            
             // compute total score
-            console.log(event.target)
+            console.log(finalScore)
+            event.target.innerHTML = finalScore
         }
 
         function funcSetElementProperties(elem, properties) {
