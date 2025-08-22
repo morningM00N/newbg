@@ -18,14 +18,40 @@
     </div>
     <div id="playArea">
         <div style="width:100vw;align-items:center;justify-content:center;flex-wrap:wrap;display:flex;">
-            size: <input style="width:200px;" id="inputRange" type="range" step="0.001" onchange="funcSizeChange(this)">
+            <table style="width:100vw;">
+                <tr style="width:100vw;">
+                    <td style="width:30vw;text-align: center;">
+                        <table style="width:100%">
+                            <tr>
+                                <td>M</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>+</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td rowspan="2">size: <input style="width:200px;" id="inputRange" type="range" step="0.001"
+                            oninput="funcSizeChange(this)"></td>
+                </tr>
+                <tr>
+                    <td style="width:30vw;text-align: center">
+                        <table style="width:100%">
+                            <tr>
+                                <td>T</td>
+                                <td>-</td>
+                                <td>0</td>
+                                <td>+</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+            </table>
         </div>
     </div>
     <script>
 
-        let remainCards = 0
-        let storeData = {}
-        storeData["usedCard"] = {}
         function funcAddCard(numOfCards) {
             if (numOfCards == 5) { remainCards = 3 }
             else { remainCards = 1 }
@@ -54,14 +80,14 @@
                         --remainCards
                         newComponent.removeChild(elem)
                         document.getElementById('playArea').appendChild(funcGetCard(cardIdx))
+                        storeData["selectedCard"].push(cardIdx)
                         if (remainCards == 0) {
                             while (newComponent.childElementCount > 1) {
                                 newComponent.removeChild(newComponent.lastChild)
                             }
                             newComponent.style.display = "none"
+                            localStorage.setItem("morningm00n_smlbi", JSON.stringify(storeData))
                         }
-                    } else {
-
                     }
                     event.stopPropagation();
                 }, true)
@@ -70,54 +96,16 @@
         function funcSizeChange(sliderElement) {
             document.documentElement.style.setProperty("--factor", 1 / sliderElement.value)
         }
-
         function funcX() {
             let classChecked = event.target.classList[0] + "Checked"
             event.target.classList.toggle(classChecked)
-            let parent = event.target.parentElement
-            while (parent.id.includes("scoreCard") == false) {
-                parent = parent.parentElement
+            if (event.target.classList.contains(classChecked)) {
+                storeData["xmarked"][event.target.id] = true
+            } else {
+                delete storeData["xmarked"][event.target.id]
             }
-            console.log(parent)
+            localStorage.setItem("morningm00n_smlbi", JSON.stringify(storeData))
         }
-
-        let cardInfor = [
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "555555554qq2sTm"
-        ]
-        let bonusAdValue = {
-            "q": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
-            "8": 8, "9": 9, "s": 10, "t": 11, "T": 12, "m": 13, "e": 14
-        }
-        let factor = 750 / (0.95 * document.documentElement.clientWidth)
-
-        document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth) / 750
-        document.getElementById('inputRange').min = 50 / 750
-
-        document.documentElement.style.setProperty("--factor", factor)
-        document.getElementById("indArea").style.setProperty("--sizeFactor", 750)
-
         function funcGetCard(id) {
             let cardIdx = Math.floor(Math.random() * cardInfor.length)
             let scoreCard = document.createElement('div')
@@ -174,6 +162,43 @@
             }
             return scoreCard
         }
+        function funcSetElementProperties(elem, properties) {
+            for (const property in properties) {
+                elem.style.setProperty(property, properties[property])
+            }
+        }
+
+
+        let cardInfor = [
+            "123456789q15sTm",
+            "555555554qq2sTm"
+        ]
+        let bonusAdValue = {
+            "q": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
+            "8": 8, "9": 9, "s": 10, "t": 11, "T": 12, "m": 13, "e": 14
+        }
+        for (let i = 0; i < 60; i++) {
+            let val = ""
+            for (let index = 0; index < 9; index++) {
+                val += (Math.floor(Math.random() * 9) + 1)
+            }
+            let keys = []
+            for (let key in bonusAdValue) {
+                keys.push(key)
+            }
+            for (let j = 0; j < 6; j++) {
+                let idx = Math.floor(Math.random() * keys.length)
+                val += keys[idx]
+            }
+            cardInfor.push(val)
+        }
+        let factor = 750 / (0.95 * document.documentElement.clientWidth)
+
+        document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth) / 750
+        document.getElementById('inputRange').min = 50 / 750
+
+        document.documentElement.style.setProperty("--factor", factor)
+        document.getElementById("indArea").style.setProperty("--sizeFactor", 750)
 
         let indArea = document.getElementById('indArea')
         let roundOffset = 7.5
@@ -275,6 +300,12 @@
                 funcSetElementProperties(btn, properties_star)
                 btn.onclick = function () {
                     event.target.classList.toggle("xMarked")
+                    if (event.target.classList.contains("xMarked")) {
+                        storeData["xmarkedclass"][event.target.id] = true
+                    } else {
+                        delete storeData["xmarkedclass"][event.target.id]
+                    }
+                    localStorage.setItem("morningm00n_smlbi", JSON.stringify(storeData))
                 }
             }
         }
@@ -292,46 +323,79 @@
             "--topOffset": 50,
             "--topStep": 0,
             "--topIdx": 0,
-            "--fontSize":0.5
+            "--fontSize": 0.5
         }
         funcSetElementProperties(btn, properties_total_score)
         btn.onclick = function () {
-            let completeScore = [15,12,10,8]
+            let completeScore = [15, 12, 10, 8]
             let finalScore = 0
             for (let index = 0; index < 4; index++) {
                 console.log(document.getElementById('complete_' + index + '1').innerHTML)
-                finalScore += completeScore[index] * Number(`${document.getElementById('complete_' + index + '1').innerHTML}`)                          
+                finalScore += completeScore[index] * Number(`${document.getElementById('complete_' + index + '1').innerHTML}`)
             }
 
             let starScore = 0
-            let starScoreArr=[1,4,9]
+            let starScoreArr = [1, 4, 9]
             for (let round = 0; round < 3; round++) {
-                for (let index = 2; index >=0 ; index--) {
-                    if (document.getElementById("star_"+round+index).classList.contains("xMarked") == true){
+                for (let index = 2; index >= 0; index--) {
+                    if (document.getElementById("star_" + round + index).classList.contains("xMarked") == true) {
                         starScore += starScoreArr[index]
                         break
                     }
                 }
-                
             }
 
             document.getElementById('score_0').value = starScore;
 
             for (let index = 0; index < 3; index++) {
-                finalScore += Number(`${document.getElementById('score_' + index).value}`)                          
+                finalScore += Number(`${document.getElementById('score_' + index).value}`)
             }
 
-            
+
             // compute total score
             console.log(finalScore)
             event.target.innerHTML = finalScore
         }
 
-        function funcSetElementProperties(elem, properties) {
-            for (const property in properties) {
-                elem.style.setProperty(property, properties[property])
+        let storeData = null
+        while (true) {
+            storeData = localStorage.getItem("morningm00n_smlbi")
+            if (storeData != null) {
+                let ans = confirm("진행 중인 게임이 있습니다. 이어서 할까요?")
+                if (ans == true) {
+                    storeData = JSON.parse(storeData)
+                    break
+                } else {
+                    let ans = confirm("새로운 게임을 시작할까요?")
+                    if (ans == true) {
+                        storeData = null
+                        localStorage.removeItem('morningm00n_smlbi')
+                    }
+                }
+            }
+            if (storeData == null) {
+                storeData = {}
+                storeData["usedCard"] = {}
+                storeData["xmarked"] = {}
+                storeData["xmarkedclass"] = {}
+                storeData["selectedCard"] = []
+                break
             }
         }
+        for (let cardIdx of storeData["selectedCard"]) {
+            document.getElementById('playArea').appendChild(funcGetCard(cardIdx))
+        }
+        for (const id in storeData["xmarkedclass"]) {
+            let elem = document.getElementById(id)
+            let classChecked = elem.classList[0] + "Checked"
+            elem.classList.toggle("xMarked")
+        }
+        for (const id in storeData["xmarked"]) {
+            let elem = document.getElementById(id)
+            let classChecked = elem.classList[0] + "Checked"
+            elem.classList.toggle(classChecked)
+        }
+
     </script>
 </body>
 
