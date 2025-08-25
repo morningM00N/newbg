@@ -10,7 +10,7 @@
 
 <body>
     <details open>
-        <summary>Score</summary>
+        <summary>점수판</summary>
         <div id="indArea" class="indCard"></div>
     </details>
     <div id="newComponent" style="display:none;">
@@ -23,7 +23,7 @@
                     <td style="width:30vw;text-align: center;">
                         <table style="width:100%">
                             <tr>
-                                <td>M</td>
+                                <td>달</td>
                                 <td id="tdmm">-</td>
                                 <td id="tdmv">0</td>
                                 <td id="tdmp">+</td>
@@ -37,7 +37,7 @@
                     <td style="width:30vw;text-align: center">
                         <table style="width:100%">
                             <tr>
-                                <td>T</td>
+                                <td>번개</td>
                                 <td id="tdtm">-</td>
                                 <td id="tdtv">0</td>
                                 <td id="tdtp">+</td>
@@ -234,9 +234,9 @@
             indArea.appendChild(btn)
             btn.className = "fixSizeElem"
             btn.id = "round_" + round
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 8)
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--heightSize", 9)
+            btn.style.setProperty("--leftOffset", 14)
             btn.style.setProperty("--leftStep", 0)
             btn.style.setProperty("--leftIdx", 0)
             btn.style.setProperty("--topOffset", roundOffset)
@@ -258,7 +258,7 @@
                 let properties_round = {
                     "--fontSize": 0.5,
                     "--widthSize": 10,
-                    "--heightSize": 10,
+                    "--heightSize": 9,
                     "--leftOffset": 80,
                     "--leftStep": 0,
                     "--leftIdx": 0,
@@ -275,10 +275,10 @@
                 indArea.appendChild(btn)
                 btn.className = "fixSizeElem"
                 btn.id = "complete_" + round + index
-                btn.style.setProperty("--widthSize", 7)
-                btn.style.setProperty("--heightSize", 10)
-                btn.style.setProperty("--leftOffset", 20)
-                btn.style.setProperty("--leftStep", 8)
+                btn.style.setProperty("--widthSize", 5)
+                btn.style.setProperty("--heightSize", 9)
+                btn.style.setProperty("--leftOffset", 23.7)
+                btn.style.setProperty("--leftStep", 5)
                 btn.style.setProperty("--leftIdx", index)
                 btn.style.setProperty("--topOffset", roundOffset)
                 btn.style.setProperty("--topStep", roundStep)
@@ -314,12 +314,12 @@
                 btn.className = "fixSizeElem"
                 btn.id = "star_" + round + index
                 let properties_star = {
-                    "--widthSize": 7,
-                    "--heightSize": 7,
-                    "--leftOffset": 50,
-                    "--leftStep": 8,
+                    "--widthSize": 6,
+                    "--heightSize": 6,
+                    "--leftOffset": 41,
+                    "--leftStep": 7.4,
                     "--leftIdx": index,
-                    "--topOffset": roundOffset,
+                    "--topOffset": roundOffset+5,
                     "--topStep": roundStep,
                     "--topIdx": round
                 }
@@ -343,12 +343,12 @@
             btn.id = "mostStar"+i
             let properties_total_score = {
                 "--widthSize": 7,
-                "--heightSize": 5,
-                "--leftOffset": 75,
+                "--heightSize": 5.65,
+                "--leftOffset": 72,
                 "--leftStep": 0,
                 "--leftIdx": 0,
                 "--topOffset": 35,
-                "--topStep": 5,
+                "--topStep": 5.65,
                 "--topIdx": i,
                 "--fontSize": 0.5
             }
@@ -366,12 +366,12 @@
         btn.className = "fixSizeElem"
         btn.id = "total_score"
         let properties_total_score = {
-            "--widthSize": 7,
-            "--heightSize": 10,
-            "--leftOffset": 80,
+            "--widthSize": 17.5,
+            "--heightSize": 9.1,
+            "--leftOffset": 71,
             "--leftStep": 0,
             "--leftIdx": 0,
-            "--topOffset": 50,
+            "--topOffset": 53.7,
             "--topStep": 0,
             "--topIdx": 0,
             "--fontSize": 0.5
