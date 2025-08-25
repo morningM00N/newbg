@@ -24,9 +24,9 @@
                         <table style="width:100%">
                             <tr>
                                 <td>M</td>
-                                <td>-</td>
-                                <td>0</td>
-                                <td>+</td>
+                                <td id="tdmm">-</td>
+                                <td id="tdmv">0</td>
+                                <td id="tdmp">+</td>
                             </tr>
                         </table>
                     </td>
@@ -38,9 +38,9 @@
                         <table style="width:100%">
                             <tr>
                                 <td>T</td>
-                                <td>-</td>
-                                <td>0</td>
-                                <td>+</td>
+                                <td id="tdtm">-</td>
+                                <td id="tdtv">0</td>
+                                <td id="tdtp">+</td>
                             </tr>
                         </table>
 
@@ -51,6 +51,29 @@
         </div>
     </div>
     <script>
+        document.getElementById('tdmm').addEventListener('click',function(){
+            let target = document.getElementById('tdmv')
+            let value = Number(target.innerHTML)
+            target.innerHTML = Math.max(0,value-1)
+        })
+
+        document.getElementById('tdmp').addEventListener('click',function(){
+            let target = document.getElementById('tdmv')
+            let value = Number(target.innerHTML)
+            target.innerHTML = value+1
+        })
+
+        document.getElementById('tdtm').addEventListener('click',function(){
+            let target = document.getElementById('tdtv')
+            let value = Number(target.innerHTML)
+            target.innerHTML = Math.max(0,value-1)
+        })
+
+        document.getElementById('tdtp').addEventListener('click',function(){
+            let target = document.getElementById('tdtv')
+            let value = Number(target.innerHTML)
+            target.innerHTML = value+1
+        })
 
         function funcAddCard(numOfCards) {
             if (numOfCards == 5) { remainCards = 3 }
@@ -162,6 +185,9 @@
             }
             return scoreCard
         }
+
+
+
         function funcSetElementProperties(elem, properties) {
             for (const property in properties) {
                 elem.style.setProperty(property, properties[property])
@@ -241,7 +267,7 @@
                     "--topIdx": round,
                 }
                 funcSetElementProperties(inp, properties_round)
-                inp.value = "20"
+                inp.value = "0"
             }
 
             for (let index = 0; index < 3; index++) {
@@ -310,6 +336,31 @@
             }
         }
 
+        for (let i = 0; i < 2; i++) {
+            let btn = document.createElement('button')
+            indArea.appendChild(btn)
+            btn.className = "fixSizeElem"
+            btn.id = "mostStar"+i
+            let properties_total_score = {
+                "--widthSize": 7,
+                "--heightSize": 5,
+                "--leftOffset": 75,
+                "--leftStep": 0,
+                "--leftIdx": 0,
+                "--topOffset": 35,
+                "--topStep": 5,
+                "--topIdx": i,
+                "--fontSize": 0.5
+            }
+             funcSetElementProperties(btn, properties_total_score)
+        }
+        document.getElementById('mostStar0').addEventListener('click',function(){
+            document.getElementById('score_2').value = 6
+        })
+        document.getElementById('mostStar1').addEventListener('click',function(){
+            document.getElementById('score_2').value = -6
+        })
+
         let btn = document.createElement('button')
         indArea.appendChild(btn)
         btn.className = "fixSizeElem"
@@ -347,9 +398,25 @@
 
             document.getElementById('score_0').value = starScore;
 
+            let scoreCards = document.getElementsByClassName('scoreCard')
+            let notfinishedScore=0
+            for (let index = 0; index < scoreCards.length; index++) {
+                const element = scoreCards[index];
+                let ans = element.querySelectorAll('.numberBtn.numberBtnChecked')
+                if (ans.length==9) {continue}
+                else {
+                    notfinishedScore += Math.floor(ans.length/2)
+                }
+            }
+
+            document.getElementById('score_1').value = notfinishedScore;
+
+
             for (let index = 0; index < 3; index++) {
                 finalScore += Number(`${document.getElementById('score_' + index).value}`)
             }
+
+
 
 
             // compute total score
