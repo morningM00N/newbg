@@ -197,27 +197,68 @@
 
         let cardInfor = [
             "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
+            "123456789q15sTm",
             "555555554qq2sTm"
         ]
         let bonusAdValue = {
             "q": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
             "8": 8, "9": 9, "s": 10, "t": 11, "T": 12, "m": 13, "e": 14
         }
-        for (let i = 0; i < 60; i++) {
-            let val = ""
-            for (let index = 0; index < 9; index++) {
-                val += (Math.floor(Math.random() * 9) + 1)
-            }
-            let keys = []
-            for (let key in bonusAdValue) {
-                keys.push(key)
-            }
-            for (let j = 0; j < 6; j++) {
-                let idx = Math.floor(Math.random() * keys.length)
-                val += keys[idx]
-            }
-            cardInfor.push(val)
-        }
+       
         let factor = 750 / (0.95 * document.documentElement.clientWidth)
 
         document.getElementById('inputRange').max = (0.95 * document.documentElement.clientWidth) / 750
