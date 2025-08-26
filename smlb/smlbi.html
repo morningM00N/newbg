@@ -14,7 +14,7 @@
         <div id="indArea" class="indCard"></div>
     </details>
     <div id="newComponent" style="display:none;">
-        <p style="width:100vw;text-align: center;">choose:</p>
+        <p id ="pselect" style="width:100vw;text-align: center;">choose:</p>
     </div>
     <div id="playArea">
         <div style="width:100vw;align-items:center;justify-content:center;flex-wrap:wrap;display:flex;">
@@ -79,6 +79,8 @@
             if (numOfCards == 5) { remainCards = 3 }
             else { remainCards = 1 }
 
+            document.getElementById("pselect").innerHTML = `${remainCards}장의 카드를 골라 주세요.`
+
             let newComponent = document.getElementById("newComponent")
             newComponent.style.display = "flex"
             let factor = 750 / (0.30 * document.documentElement.clientWidth)
@@ -101,6 +103,7 @@
                     let ans = confirm(`${Number(elem.id.replace('newCard', '')) + 1}번째 카드를 고르겠습니까?`)
                     if (ans == true) {
                         --remainCards
+                        
                         newComponent.removeChild(elem)
                         document.getElementById('playArea').appendChild(funcGetCard(cardIdx))
                         storeData["selectedCard"].push(cardIdx)
@@ -110,6 +113,9 @@
                             }
                             newComponent.style.display = "none"
                             localStorage.setItem("morningm00n_smlbi", JSON.stringify(storeData))
+                        }
+                        else {
+                            document.getElementById("pselect").innerHTML = `${remainCards}장의 카드를 골라 주세요.`
                         }
                     }
                     event.stopPropagation();
@@ -294,7 +300,9 @@
             btn.onclick = function () {
                 let res = confirm(`${round + 1} 라운드를 시작하겠습니까?`)
                 if (res == true) {
-                    if (round == 0) { funcAddCard(5) }
+                    if (round == 0) { 
+                        funcAddCard(5)
+                    }
                     else { funcAddCard(3) }
                 }
             }
