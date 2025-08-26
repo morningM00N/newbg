@@ -162,6 +162,9 @@
                 btn2.className = "rowBonus"
                 btn2.style.setProperty("--sizeFactor", 95)
                 btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][9 + index]])
+                if (cardInfor[cardIdx][9 + index]=='e'){
+                    btn.style.display="none"
+                }
                 btn2.onclick = funcX
             }
 
@@ -181,6 +184,9 @@
                 btn2.onclick = funcX
                 btn2.style.setProperty("--sizeFactor", 95)
                 btn2.style.setProperty("--index", bonusAdValue[cardInfor[cardIdx][12 + index]])
+                if (cardInfor[cardIdx][12 + index]=='e'){
+                    btn.style.display="none"
+                }
 
             }
             return scoreCard
@@ -195,65 +201,67 @@
         }
 
 
-        let cardInfor = [
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "123456789q15sTm",
-            "555555554qq2sTm"
-        ]
+        let cardInfor = []
+        cardInfor[1]="12323145678sTTT"
+        cardInfor[2]="123312456879s64"
+        cardInfor[3]="456564789s23mmm"
+        cardInfor[4]="1232317896549m8"
+        cardInfor[5]="12331278965msss"
+        cardInfor[6]="456789897231T45"
+        cardInfor[7]="12345656479821T"
+        cardInfor[8]="123456645879eqs"
+        cardInfor[9]="456654789321m97"
+        cardInfor[10]="123789897564qme"
+        cardInfor[11]="1237899786453s1"
+        cardInfor[12]="123231456q7ttTs"
+        cardInfor[13]="456789978213ttq"
+        cardInfor[14]="1233124568qtmst"
+        cardInfor[15]="456564789q1tsst"
+        cardInfor[16]="123231789q4tsst"
+        cardInfor[17]="1233127895qttmm"
+        cardInfor[18]="456789897tq3sTt"
+        cardInfor[19]="123456564tq7mmt"
+        cardInfor[20]="123456645t9qsts"
+        cardInfor[21]="4566457892qtmmt"
+        cardInfor[22]="123789897tq5smt"
+        cardInfor[23]="123789978t6qstT"
+        cardInfor[24]="456789978t2qstm"
+        cardInfor[25]="123231456789TTT"
+        cardInfor[26]="123312456987564"
+        cardInfor[27]="456564789123mmm"
+        cardInfor[28]="123231789465978"
+        cardInfor[29]="123312789654sss"
+        cardInfor[30]="456789897123645"
+        cardInfor[31]="123456564798213"
+        cardInfor[32]="123456645987sss"
+        cardInfor[33]="456645789321897"
+        cardInfor[34]="123789897456mmm"
+        cardInfor[35]="123789978645231"
+        cardInfor[36]="456789978321TTT"
+        cardInfor[37]="123231456qeqtts"
+        cardInfor[38]="1233124569qtsst"
+        cardInfor[39]="456564789q3ttss"
+        cardInfor[40]="123231789q6ttmm"
+        cardInfor[41]="123321789eqqmtt"
+        cardInfor[42]="456789897tq1mmt"
+        cardInfor[43]="123456564qqetst"
+        cardInfor[44]="123456645t8qsts"
+        cardInfor[45]="456645789eqqttm"
+        cardInfor[46]="123789897qqetmt"
+        cardInfor[47]="123789978t4qmtm"
+        cardInfor[48]="456789978qeqstt"
+        cardInfor[49]="123231456789mss"
+        cardInfor[50]="123312456987mms"
+        cardInfor[51]="456564789123ssm"
+        cardInfor[52]="123231789456Tmm"
+        cardInfor[53]="123312789654TTm"
+        cardInfor[54]="456789897123mTm"
+        cardInfor[55]="123456564789mss"
+        cardInfor[56]="123456645987mms"
+        cardInfor[57]="456645789321msm"
+        cardInfor[58]="123789897456Tmm"
+        cardInfor[59]="123789978654TTm"
+        cardInfor[0]="456789978321TmT"
         let bonusAdValue = {
             "q": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
             "8": 8, "9": 9, "s": 10, "t": 11, "T": 12, "m": 13, "e": 14
