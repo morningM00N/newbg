@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>영리한 여우</title>
     <style>
         body {
             display: flex;
@@ -27,8 +27,8 @@
             padding: 0px;
             box-sizing: border-box;
             background-color: white;
-            background-image: url('img/image.png');
-            background-size: 100%;
+            background-image: url('https://github.com/morningM00N/boardgame/blob/main/img/gants/gantsmod.png?raw=true');
+            background-size: 100vw calc(600 * 100vw / 421);
             /*calc(421px * var(--factor)) calc(600px * var(--factor));*/
         }
 
@@ -37,7 +37,7 @@
             padding: 0px;
             box-sizing: border-box;
             background-color: transparent;
-            border: 1px dotted red;
+            border: 0px;
             position: absolute;
             font-size: calc(1vw * var(--fontSize));
             width: calc(1vw * var(--widthSize));
@@ -105,12 +105,12 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `round_${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--heightSize", 8)
+            btn.style.setProperty("--leftOffset", 19)
+            btn.style.setProperty("--leftStep", 14)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 5)
+            btn.style.setProperty("--topOffset", 2)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickXMarkBtn(event, btn)
@@ -122,12 +122,12 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `bonus_1${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 7)
+            btn.style.setProperty("--heightSize", 7)
+            btn.style.setProperty("--leftOffset", 30)
+            btn.style.setProperty("--leftStep", 9.6)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 30)
+            btn.style.setProperty("--topOffset", 18.5)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickCircleBtn(event, btn)
@@ -139,12 +139,12 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `bonus_2${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 7)
+            btn.style.setProperty("--heightSize", 7)
+            btn.style.setProperty("--leftOffset", 30)
+            btn.style.setProperty("--leftStep", 9.6)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 50)
+            btn.style.setProperty("--topOffset", 32.7)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickCircleBtn(event, btn)
@@ -158,13 +158,13 @@
                 mainDiv.appendChild(btn)
                 btn.className = "xMarkBtn"
                 btn.id = `yellow_${idx}${idx2}`
-                btn.style.setProperty("--widthSize", 10)
-                btn.style.setProperty("--heightSize", 10)
-                btn.style.setProperty("--leftOffset", 10)
-                btn.style.setProperty("--leftStep", 12)
+                btn.style.setProperty("--widthSize", 8)
+                btn.style.setProperty("--heightSize", 8)
+                btn.style.setProperty("--leftOffset", 4)
+                btn.style.setProperty("--leftStep", 8.7)
                 btn.style.setProperty("--leftIdx", idx)
-                btn.style.setProperty("--topOffset", 70)
-                btn.style.setProperty("--topStep", 12)
+                btn.style.setProperty("--topOffset", 45.5)
+                btn.style.setProperty("--topStep", 7.4)
                 btn.style.setProperty("--topIdx", idx2)
                 btn.onclick = (event) => clickXMarkBtn(event, btn)
             }
@@ -178,13 +178,13 @@
                 mainDiv.appendChild(btn)
                 btn.className = "xMarkBtn"
                 btn.id = `blue_${idx}${idx2}`
-                btn.style.setProperty("--widthSize", 10)
-                btn.style.setProperty("--heightSize", 10)
-                btn.style.setProperty("--leftOffset", 70)
-                btn.style.setProperty("--leftStep", 12)
+                btn.style.setProperty("--widthSize", 8)
+                btn.style.setProperty("--heightSize", 8)
+                btn.style.setProperty("--leftOffset", 53)
+                btn.style.setProperty("--leftStep", 8.76)
                 btn.style.setProperty("--leftIdx", idx)
-                btn.style.setProperty("--topOffset", 70)
-                btn.style.setProperty("--topStep", 12)
+                btn.style.setProperty("--topOffset", 54)
+                btn.style.setProperty("--topStep", 7.2)
                 btn.style.setProperty("--topIdx", idx2)
                 btn.onclick = (event) => clickXMarkBtn(event, btn)
             }
@@ -196,12 +196,12 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `green_${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--heightSize", 8)
+            btn.style.setProperty("--leftOffset", 11.6)
+            btn.style.setProperty("--leftStep", 7.65)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 120)
+            btn.style.setProperty("--topOffset", 90)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickXMarkBtn(event, btn)
@@ -213,13 +213,13 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `orange_${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--fontSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--fontSize", 5)
+            btn.style.setProperty("--heightSize", 8)
+            btn.style.setProperty("--leftOffset", 11.6)
+            btn.style.setProperty("--leftStep", 7.65)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 130)
+            btn.style.setProperty("--topOffset", 102.7)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickNumberBtn(event, btn)
@@ -231,13 +231,13 @@
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `purple_${index}`
-            btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--fontSize", 10)
-            btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--fontSize", 5)
+            btn.style.setProperty("--heightSize", 8)
+            btn.style.setProperty("--leftOffset", 11.6)
+            btn.style.setProperty("--leftStep", 7.65)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 140)
+            btn.style.setProperty("--topOffset", 115.5)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickNumberBtn(event, btn)
@@ -250,12 +250,15 @@
             btn.className = "xMarkBtn"
             btn.id = `score_${index}`
             btn.style.setProperty("--widthSize", 10)
-            btn.style.setProperty("--fontSize", 10)
+            btn.style.setProperty("--fontSize", 5)
             btn.style.setProperty("--heightSize", 10)
-            btn.style.setProperty("--leftOffset", 20)
-            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftOffset", 2)
+            if (index==6){
+                btn.style.setProperty("--leftOffset", 5.5)
+            } 
+            btn.style.setProperty("--leftStep", 13.7)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 150)
+            btn.style.setProperty("--topOffset", 130)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
         }
@@ -326,9 +329,8 @@
                     scores[4] += Number(storeData['val'][btnid])
                 }
             }
-            if (('yellow_00' in storeData['X'])&&
-            ('yellow_11' in storeData['X'])&&
-            ('yellow_22' in storeData['X'])&&
+            if (('yellow_31' in storeData['X'])&&
+            ('yellow_32' in storeData['X'])&&
             ('yellow_33' in storeData['X'])){
                 numOfFoxes+=1
             }
@@ -340,11 +342,16 @@
                 numOfFoxes+=1
             }
 
-            if ('green_5' in storeData['X']){
+            if ('green_6' in storeData['X']){
                 numOfFoxes+=1
             }
 
-            if ('purple_3' in storeData['val']){
+            
+            if ('orange_7' in storeData['val']){
+                numOfFoxes+=1
+            }
+
+            if ('purple_6' in storeData['val']){
                 numOfFoxes+=1
             }
             console.log(scores, numOfFoxes)
@@ -354,10 +361,15 @@
             document.getElementById('score_5').innerHTML = numOfFoxes
             let totalScore = 0
             let minScore = scores[0]
+            let minIdx = 0
             for (let idx= 0; idx< 5; idx++) {
-                minScore = Math.min(minScore,scores[idx])
+                if (minScore > scores[idx]){
+                    minScore = scores[idx]
+                    minIdx = idx
+                }
                 totalScore += scores[idx]
             }
+            document.getElementById("score_"+minIdx).style.color = "red"
             document.getElementById('score_6').innerHTML = numOfFoxes*minScore+totalScore
 
         })
@@ -367,7 +379,7 @@
 
         while (storeData != null) {
             let repeatAns = true // 
-            //repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
             if (repeatAns == true) {
                 storeData = JSON.parse(storeData)
                 for (const [key, val] of Object.entries(storeData["X"])) {

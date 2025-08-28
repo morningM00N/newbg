@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>두 배로 영리한 여우</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+        }
+
+        #mainDiv {
+            width: 100vw;
+            /*calc(421px * var(--factor));*/
+            height: calc(740 * 100vw / 459);
+            /*calc(600px * var(--factor));*/
+            position: relative;
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            background-color: white;
+            background-image: url('img/image.png');
+            background-size: 100vw calc(740 * 100vw / 459);
+            /*calc(421px * var(--factor)) calc(600px * var(--factor));*/
+        }
+
+        .xMarkBtn {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            background-color: transparent;
+            border: 1px dotted red;
+            position: absolute;
+            font-size: calc(1vw * var(--fontSize));
+            width: calc(1vw * var(--widthSize));
+            height: calc(1vw * var(--heightSize));
+            left: calc(1vw * (var(--leftOffset) + var(--leftStep) * var(--leftIdx)));
+            top: calc(1vw * (var(--topOffset) + var(--topStep) * var(--topIdx)));
+
+            background-size: 100% 200%;
+            border-radius: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mainDiv">
+    </div>
+    <script>
+
+        function clickCircleBtn(event, btn) {
+            if ((btn.id in storeData['circle']) == false) {
+                btn.style.border = "1vw solid black"
+                storeData['circle'][btn.id] = "circle"
+            } else if (storeData['circle'][btn.id] == "circle") {
+                btn.style.backgroundImage = "url('img/cross.webp')"
+                storeData['circle'][btn.id] = "X"
+            } else {
+                btn.style.border = "0px"
+                btn.style.backgroundImage = "url()"
+                delete storeData['circle'][btn.id]
+            }
+            localStorage.setItem('morningm00n_doppelt', JSON.stringify(storeData))
+        }
+
+
+
+        function clickXMarkBtn(event, btn) {
+            if (btn.id in storeData['X']) {
+                btn.style.backgroundImage = "url()"
+                delete storeData['X'][btn.id]
+            } else {
+                btn.style.backgroundImage = "url('img/cross.webp')"
+                storeData['X'][btn.id] = true
+            }
+            localStorage.setItem('morningm00n_doppelt', JSON.stringify(storeData))
+        }
+
+        function clickNumberBtn(event, btn) {
+            if (Number(btn.innerHTML) >= 1 && Number(btn.innerHTML) < 6) {
+                btn.innerHTML = Number(btn.innerHTML) + 1
+                storeData['val'][btn.id] = Number(btn.innerHTML)
+            } else if (Number(btn.innerHTML) == 6) {
+                btn.innerHTML = ""
+                delete storeData['val'][btn.id]
+            } else {
+                btn.innerHTML = 1
+                storeData['val'][btn.id] = Number(btn.innerHTML)
+            }
+            localStorage.setItem('morningm00n_doppelt', JSON.stringify(storeData))
+        }
+
+
+        function clickNumber2Btn(event, btn) {
+            if (Number(btn.innerHTML) >= 1 && Number(btn.innerHTML) < 12) {
+                btn.innerHTML = Number(btn.innerHTML) + 1
+                storeData['val'][btn.id] = Number(btn.innerHTML)
+            } else if (Number(btn.innerHTML) == 12) {
+                btn.innerHTML = ""
+                delete storeData['val'][btn.id]
+            } else {
+                btn.innerHTML = 1
+                storeData['val'][btn.id] = Number(btn.innerHTML)
+            }
+            localStorage.setItem('morningm00n_doppelt', JSON.stringify(storeData))
+        }
+
+        let mainDiv = document.getElementById("mainDiv")
+        // round area
+        for (let index = 0; index < 6; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `round_${index}`
+            btn.style.setProperty("--widthSize", 8)
+            btn.style.setProperty("--heightSize", 8)
+            btn.style.setProperty("--leftOffset", 22.8)
+            btn.style.setProperty("--leftStep", 13.25)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 3)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickXMarkBtn(event, btn)
+        }
+
+        // bonus area
+        for (let i = 0; i < 3; i++) {
+            for (let index = 0; index < 6; index++) {
+                let btn = document.createElement('button')
+                mainDiv.appendChild(btn)
+                btn.className = "xMarkBtn"
+                btn.id = `bonus_${i}${index}`
+                btn.style.setProperty("--widthSize", 6.5)
+                btn.style.setProperty("--heightSize", 6.5)
+                btn.style.setProperty("--leftOffset", 33)
+                btn.style.setProperty("--leftStep", 11.2)
+                btn.style.setProperty("--leftIdx", index)
+                btn.style.setProperty("--topOffset", 20)
+                btn.style.setProperty("--topStep", 12)
+                btn.style.setProperty("--topIdx", i)
+                btn.onclick = (event) => clickCircleBtn(event, btn)
+            }
+        }
+
+
+        // gray area
+        for (let idx = 0; idx < 6; idx++) {
+            for (let idx2 = 0; idx2 < 4; idx2++) {
+                let btn = document.createElement('button')
+                mainDiv.appendChild(btn)
+                btn.className = "xMarkBtn"
+                btn.id = `gray_${idx}${idx2}`
+                btn.style.setProperty("--widthSize", 7)
+                btn.style.setProperty("--heightSize", 7)
+                btn.style.setProperty("--leftOffset", 4.4)
+                btn.style.setProperty("--leftStep", 7.42)
+                btn.style.setProperty("--leftIdx", idx)
+                btn.style.setProperty("--topOffset", 65)
+                btn.style.setProperty("--topStep", 7.2)
+                btn.style.setProperty("--topIdx", idx2)
+                btn.onclick = (event) => clickXMarkBtn(event, btn)
+            }
+        }
+
+        // yellow area
+        for (let idx = 0; idx < 2; idx++) {
+            for (let idx2 = 0; idx2 < 5; idx2++) {
+                let btn = document.createElement('button')
+                mainDiv.appendChild(btn)
+                btn.className = "xMarkBtn"
+                btn.id = `yellow_${idx}${idx2}`
+                btn.style.setProperty("--widthSize", 8)
+                btn.style.setProperty("--heightSize", 8)
+                btn.style.setProperty("--leftOffset", 64.5)
+                if (idx2 % 2 == 1) {
+                    btn.style.setProperty("--leftOffset", 56.5)
+                }
+                btn.style.setProperty("--leftStep", 16.2)
+                btn.style.setProperty("--leftIdx", idx)
+                btn.style.setProperty("--topOffset", 64.4)
+                btn.style.setProperty("--topStep", 4.65)
+                btn.style.setProperty("--topIdx", idx2)
+                btn.onclick = (event) => clickCircleBtn(event, btn)
+            }
+        }
+
+        // blue area
+        for (let index = 0; index < 12; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `blue_${index}`
+            btn.style.setProperty("--widthSize", 6)
+            btn.style.setProperty("--fontSize", 4)
+            btn.style.setProperty("--heightSize", 6)
+            btn.style.setProperty("--leftOffset", 9.8)
+            btn.style.setProperty("--leftStep", 7.25)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 106)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickNumber2Btn(event, btn)
+        }
+
+        // green area
+        for (let index = 0; index < 12; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `green_${index}`
+            btn.style.setProperty("--widthSize", 6)
+            btn.style.setProperty("--fontSize", 4)
+            btn.style.setProperty("--heightSize", 6)
+            btn.style.setProperty("--leftOffset", 9.8)
+            btn.style.setProperty("--leftStep", 7.25)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 121)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickNumberBtn(event, btn)
+        }
+
+        // green area
+        for (let index = 0; index < 12; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `pink_${index}`
+            btn.style.setProperty("--widthSize", 6)
+            btn.style.setProperty("--fontSize", 4)
+            btn.style.setProperty("--heightSize", 6)
+            btn.style.setProperty("--leftOffset", 9.8)
+            btn.style.setProperty("--leftStep", 7.25)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 135)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickNumberBtn(event, btn)
+        }
+
+
+        // score area
+        for (let index = 0; index < 7; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `score_${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--fontSize", 5)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 3.6)
+            btn.style.setProperty("--leftStep", 13.72)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 149.5)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+        }
+        document.getElementById("score_6").addEventListener("click", function () {
+            console.log("calculate score")
+            let numOfFoxes = 0
+            let scores = [0, 0, 0, 0, 0]
+
+            // gray
+            let grayScore = [2, 4, 7, 11, 16, 22]
+            for (let idx = 0; idx < 6; idx++) {
+                let numOfChecked = 0
+                for (let idx2 = 0; idx2 < 4; idx2++) {
+                    let btnid = `gray_${idx}${idx2}`
+                    if (btnid in storeData['X']) {
+                        numOfChecked += 1
+                    }
+                }
+                if (numOfChecked == 4) {
+                    scores[0] += grayScore[idx]
+                }
+            }
+
+
+            //yellow
+            let yScore = [0, 3, 10, 21, 36, 55, 75, 96, 118, 141, 165]
+            let numOfYellows = 0
+            for (let idx = 0; idx < 2; idx++) {
+                for (let idx2 = 0; idx2 < 5; idx2++) {
+                    let btnid = `yellow_${idx}${idx2}`
+                    if (btnid in storeData['circle'] && storeData['circle'][btnid] == 'X') {
+                        numOfYellows += 1
+                    }
+                }
+            }
+            scores[1] = yScore[numOfYellows]
+
+            //blue
+            let bScore = [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78]
+            let blueIdx = -1
+            for (let index = 11; index >= 0; index--) {
+                let btnid = `blue_${index}`
+                if (btnid in storeData['val']) {
+                    blueIdx = index
+                    break
+                }
+            }
+            if (blueIdx != -1) {
+                scores[2] = bScore[blueIdx]
+            }
+
+            // green
+            let gMul = [2,2,2,1,3,3,3,2,3,1,4,1]
+            for (let index = 0; index < 6; index++) {
+                let btnid1 = `green_${2*index}`
+                let btnid2 = `green_${2*index+1}`
+
+                if (btnid1 in storeData['val'] && btnid2 in storeData['val']) {
+                    scores[3] += storeData['val'][btnid1] * gMul[2*index] - storeData['val'][btnid2]*gMul[2*index+1]
+                }
+            }
+
+            // pink
+            for (let index = 0; index < 11; index++) {
+                let btnid = `pink_${index}`
+                if (btnid in storeData['val']) {
+                    scores[4] += Number(storeData['val'][btnid])
+                }
+            }
+
+            if ('bonus_05' in storeData['circle']){
+                numOfFoxes += 1
+            }
+
+            if (('gray_20' in storeData['X']) &&
+                ('gray_21' in storeData['X']) &&
+                ('gray_22' in storeData['X']) &&
+                ('gray_23' in storeData['X'])) {
+                numOfFoxes += 1
+            }
+
+            if (('yellow_10' in storeData['circle']) &&
+                'yellow_12' in storeData['circle'] &&
+                'yellow_14' in storeData['circle']) {
+                numOfFoxes += 1
+            }
+
+            if ('blue_8' in storeData['val']) {
+                numOfFoxes += 1
+            }
+
+
+            if ('green_6' in storeData['val']) {
+                numOfFoxes += 1
+            }
+
+            if ('pink_7' in storeData['val'] && storeData['val']['pink_7'] >= 2) {
+                numOfFoxes += 1
+            }
+            console.log(scores, numOfFoxes)
+            for (let idx = 0; idx < 5; idx++) {
+                document.getElementById('score_' + idx).innerHTML = scores[idx]
+            }
+            
+            let totalScore = 0
+            let minScore = scores[0]
+            let minIdx = 0
+            for (let idx = 0; idx < 5; idx++) {
+                document.getElementById("score_" + idx).style.color = ""
+                if (minScore > scores[idx]) {
+                    minScore = scores[idx]
+                    minIdx = idx
+                }
+                totalScore += scores[idx]
+            }
+            document.getElementById('score_5').innerHTML = numOfFoxes * minScore 
+            document.getElementById("score_" + minIdx).style.color = "red"
+            document.getElementById('score_6').innerHTML = numOfFoxes * minScore + totalScore
+
+        })
+
+
+        let storeData = localStorage.getItem('morningm00n_doppelt')
+
+        while (storeData != null) {
+            let repeatAns = true // 
+            //repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            if (repeatAns == true) {
+                storeData = JSON.parse(storeData)
+                for (const [key, val] of Object.entries(storeData["X"])) {
+                    let btn = document.getElementById(key)
+                    btn.style.backgroundImage = "url('img/cross.webp')"
+                }
+                for (const [key, val] of Object.entries(storeData["val"])) {
+                    let btn = document.getElementById(key)
+                    btn.innerHTML = val
+                }
+                for (const [key, val] of Object.entries(storeData["circle"])) {
+                    let btn = document.getElementById(key)
+                    if (val == "circle") {
+                        btn.style.border = "1vw solid black"
+                    } else if (val == "X") {
+                        btn.style.backgroundImage = "url('img/cross.webp')"
+                        btn.style.border = "1vw solid black"
+                    }
+                }
+
+                break
+            } else {
+                let repAns = confirm('새로운 게임을 시작하시겠습니까?')
+                if (repAns == true) {
+                    storeData = null
+                    localStorage.removeItem('morningm00n_doppelt')
+                }
+            }
+        }
+
+        if (storeData == null) {
+            storeData = {}
+            storeData["X"] = {}
+            storeData["val"] = {}
+            storeData["circle"] = {}
+        }
+
+    </script>
+</body>
+
+</html>
