@@ -18,44 +18,35 @@
         }
 
         #mainDiv {
-            width: calc(421px * var(--factor));
-            height: calc(600px * var(--factor));
+            width: 100vw;
+            /*calc(421px * var(--factor));*/
+            height: calc(600 * 100vw / 421);
+            /*calc(600px * var(--factor));*/
             position: relative;
             margin: 0px;
             padding: 0px;
             box-sizing: border-box;
             background-color: white;
             background-image: url('img/image.png');
-            background-size: calc(421px * var(--factor)) calc(600px * var(--factor));
+            background-size: 100%;
+            /*calc(421px * var(--factor)) calc(600px * var(--factor));*/
         }
 
         .xMarkBtn {
             margin: 0px;
             padding: 0px;
             box-sizing: border-box;
-            background-color: lightgray;
+            background-color: transparent;
+            border: 1px dotted red;
             position: absolute;
-            font-size: calc(1px * var(--fontSize) * var(--factor));
-            width: calc(1px * var(--widthSize) * var(--factor));
-            height: calc(1px * var(--heightSize) * var(--factor));
-            left: calc(1px * (var(--leftOffset) + var(--leftStep) * var(--leftIdx)) * var(--factor));
-            top: calc(1px * (var(--topOffset) + var(--topStep) * var(--topIdx)) * var(--factor));
-        }
+            font-size: calc(1vw * var(--fontSize));
+            width: calc(1vw * var(--widthSize));
+            height: calc(1vw * var(--heightSize));
+            left: calc(1vw * (var(--leftOffset) + var(--leftStep) * var(--leftIdx)));
+            top: calc(1vw * (var(--topOffset) + var(--topStep) * var(--topIdx)));
 
-        .xMarked {
-            background-image: url(img/cross.webp);
-            background-size: calc(1px * var(--widthSize) * var(--factor)) calc(2px * var(--widthSize) * var(--factor));
-            animation: wipe-in 0.2s ease-in forwards;
-        }
-
-        @keyframes wipe-in {
-            from {
-                clip-path: polygon(0 0, 100% 0, 100% 0, 0% 0%);
-            }
-
-            to {
-                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            }
+            background-size: 100% 200%;
+            border-radius: 100%;
         }
     </style>
 </head>
@@ -65,97 +56,338 @@
     </div>
     <script>
 
+        function clickCircleBtn(event, btn) {
+            if ((btn.id in storeData['circle']) == false) {
+                btn.style.border = "1vw solid black"
+                storeData['circle'][btn.id] = "circle"
+            } else if (storeData['circle'][btn.id] == "circle") {
+                btn.style.backgroundImage = "url('img/cross.webp')"
+                storeData['circle'][btn.id] = "X"
+            } else {
+                btn.style.border = "0px"
+                btn.style.backgroundImage = "url()"
+                delete storeData['circle'][btn.id]
+            }
+            localStorage.setItem('morningm00n_gants', JSON.stringify(storeData))
+        }
+
+
 
         function clickXMarkBtn(event, btn) {
-            console.log(btn)
-            btn.classList.toggle('xMarked')
-            if (btn.id in storeData) {
-                delete storeData[btn.id]
+            if (btn.id in storeData['X']) {
+                btn.style.backgroundImage = "url()"
+                delete storeData['X'][btn.id]
             } else {
-                storeData[btn.id] = true
+                btn.style.backgroundImage = "url('img/cross.webp')"
+                storeData['X'][btn.id] = true
             }
-            console.log(storeData)
             localStorage.setItem('morningm00n_gants', JSON.stringify(storeData))
         }
 
         function clickNumberBtn(event, btn) {
-            console.log(btn)
-            if (Number(btn.innerHTML)>=1 && Number(btn.innerHTML)<6){
-                btn.innerHTML = Number(btn.innerHTML)+1
-                storeData[btn.id] = Number(btn.innerHTML)
-            } else if (Number(btn.innerHTML)==6) {
+            if (Number(btn.innerHTML) >= 1 && Number(btn.innerHTML) < 6) {
+                btn.innerHTML = Number(btn.innerHTML) + 1
+                storeData['val'][btn.id] = Number(btn.innerHTML)
+            } else if (Number(btn.innerHTML) == 6) {
                 btn.innerHTML = ""
-                delete storeData[btn.id]
-            } else{
+                delete storeData['val'][btn.id]
+            } else {
                 btn.innerHTML = 1
-                storeData[btn.id] = Number(btn.innerHTML)
+                storeData['val'][btn.id] = Number(btn.innerHTML)
             }
-            console.log(storeData)
             localStorage.setItem('morningm00n_gants', JSON.stringify(storeData))
         }
 
-        let factor = Math.min(document.documentElement.clientWidth / 421, document.documentElement.clientHeight / 600)
         let mainDiv = document.getElementById("mainDiv")
-        mainDiv.style.setProperty("--factor", factor)
-
         // round area
         for (let index = 0; index < 6; index++) {
             let btn = document.createElement('button')
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `round_${index}`
-            btn.style.setProperty("--factor", factor)
-            btn.style.setProperty("--widthSize", 50)
-            btn.style.setProperty("--heightSize", 50)
-            btn.style.setProperty("--leftOffset", 100)
-            btn.style.setProperty("--leftStep", 70)
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 100)
+            btn.style.setProperty("--topOffset", 5)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickXMarkBtn(event, btn)
         }
-        // bonus area
-        for (let index = 0; index < 6; index++) {
+
+        // bonus area1
+        for (let index = 0; index < 7; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `bonus_1${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 30)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickCircleBtn(event, btn)
+        }
+
+        // bonus area2
+        for (let index = 0; index < 7; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `bonus_2${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 50)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickCircleBtn(event, btn)
+        }
+
+        // yellow area
+        for (let idx = 0; idx < 4; idx++) {
+            for (let idx2 = 0; idx2 < 4; idx2++) {
+                if (idx + idx2 == 3) continue
+                let btn = document.createElement('button')
+                mainDiv.appendChild(btn)
+                btn.className = "xMarkBtn"
+                btn.id = `yellow_${idx}${idx2}`
+                btn.style.setProperty("--widthSize", 10)
+                btn.style.setProperty("--heightSize", 10)
+                btn.style.setProperty("--leftOffset", 10)
+                btn.style.setProperty("--leftStep", 12)
+                btn.style.setProperty("--leftIdx", idx)
+                btn.style.setProperty("--topOffset", 70)
+                btn.style.setProperty("--topStep", 12)
+                btn.style.setProperty("--topIdx", idx2)
+                btn.onclick = (event) => clickXMarkBtn(event, btn)
+            }
+        }
+
+        // blue area
+        for (let idx = 0; idx < 4; idx++) {
+            for (let idx2 = 0; idx2 < 3; idx2++) {
+                if (idx == 0 && idx2 == 0) continue
+                let btn = document.createElement('button')
+                mainDiv.appendChild(btn)
+                btn.className = "xMarkBtn"
+                btn.id = `blue_${idx}${idx2}`
+                btn.style.setProperty("--widthSize", 10)
+                btn.style.setProperty("--heightSize", 10)
+                btn.style.setProperty("--leftOffset", 70)
+                btn.style.setProperty("--leftStep", 12)
+                btn.style.setProperty("--leftIdx", idx)
+                btn.style.setProperty("--topOffset", 70)
+                btn.style.setProperty("--topStep", 12)
+                btn.style.setProperty("--topIdx", idx2)
+                btn.onclick = (event) => clickXMarkBtn(event, btn)
+            }
+        }
+
+        // green area
+        for (let index = 0; index < 11; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `green_${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 120)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickXMarkBtn(event, btn)
+        }
+
+        // orange area
+        for (let index = 0; index < 11; index++) {
             let btn = document.createElement('button')
             mainDiv.appendChild(btn)
             btn.className = "xMarkBtn"
             btn.id = `orange_${index}`
-            btn.style.setProperty("--factor", factor)
-            btn.style.setProperty("--fontSize", 50)
-            btn.style.setProperty("--widthSize", 50)
-            btn.style.setProperty("--heightSize", 50)
-            btn.style.setProperty("--leftOffset", 100)
-            btn.style.setProperty("--leftStep", 70)
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--fontSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
             btn.style.setProperty("--leftIdx", index)
-            btn.style.setProperty("--topOffset", 200)
+            btn.style.setProperty("--topOffset", 130)
             btn.style.setProperty("--topStep", 0)
             btn.style.setProperty("--topIdx", 0)
             btn.onclick = (event) => clickNumberBtn(event, btn)
-        }        
-        // yellow area
-        // blue area
-        // green area
-        // orange area
+        }
+
         // purple area
+        for (let index = 0; index < 11; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `purple_${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--fontSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 140)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+            btn.onclick = (event) => clickNumberBtn(event, btn)
+        }
+
         // score area
+        for (let index = 0; index < 7; index++) {
+            let btn = document.createElement('button')
+            mainDiv.appendChild(btn)
+            btn.className = "xMarkBtn"
+            btn.id = `score_${index}`
+            btn.style.setProperty("--widthSize", 10)
+            btn.style.setProperty("--fontSize", 10)
+            btn.style.setProperty("--heightSize", 10)
+            btn.style.setProperty("--leftOffset", 20)
+            btn.style.setProperty("--leftStep", 12)
+            btn.style.setProperty("--leftIdx", index)
+            btn.style.setProperty("--topOffset", 150)
+            btn.style.setProperty("--topStep", 0)
+            btn.style.setProperty("--topIdx", 0)
+        }
+        document.getElementById("score_6").addEventListener("click", function () {
+            console.log("calculate score")
+            let numOfFoxes = 0
+            let scores = [0, 0, 0, 0, 0]
+
+            // yellow
+            let yScore = [10, 14, 16, 20]
+            for (let idx = 0; idx < 4; idx++) {
+                let count = 0
+                for (let idx2 = 0; idx2 < 4; idx2++) {
+                    if (idx + idx2 == 3) continue
+                    let btnid = `yellow_${idx}${idx2}`
+                    if (btnid in storeData['X']) {
+                        count += 1
+                    }
+                }
+                if (count == 3) {
+                    scores[0] += yScore[idx]
+                }
+            }
+
+            //blue
+            let bScore = [0,1, 2, 4, 7, 11, 16, 27, 29, 37, 46, 56]
+            let numOfBlues=0
+            for (let idx = 0; idx < 4; idx++) {
+                for (let idx2 = 0; idx2 < 3; idx2++) {
+                    if (idx == 0 && idx2 == 0) continue
+                    let btnid = `blue_${idx}${idx2}`
+                    if (btnid in storeData['X']){
+                        numOfBlues+=1
+                    }
+                }
+            }
+            scores[1] = bScore[numOfBlues]
+
+            //green
+            let gScore = [1,3,6,10,15,21,28,36,45,55,66]
+            let greenIdx = -1
+            for (let index = 10; index >=0; index--) {
+                let btnid = `green_${index}`
+                if (btnid in storeData['X']){
+                    greenIdx = index
+                    break
+                }
+            }
+            if (greenIdx!=-1){
+                scores[2] = gScore[greenIdx]
+            }
+            for (let index = 0; index <11; index++) {
+                let btnid = `orange_${index}`
+                let multi = 1
+                if (index == 3 || index == 6 || index == 8){
+                    multi=2
+                }
+                if (index == 10) multi=3
+
+                if (btnid in storeData['val']){
+                    scores[3] += multi*Number(storeData['val'][btnid])
+                }
+            }
+            
+            for (let index = 0; index <11; index++) {
+                let btnid = `purple_${index}`
+                if (btnid in storeData['val']){
+                    scores[4] += Number(storeData['val'][btnid])
+                }
+            }
+            if (('yellow_00' in storeData['X'])&&
+            ('yellow_11' in storeData['X'])&&
+            ('yellow_22' in storeData['X'])&&
+            ('yellow_33' in storeData['X'])){
+                numOfFoxes+=1
+            }
+
+            if (('blue_02' in storeData['X'])&&
+            ('blue_12' in storeData['X'])&&
+            ('blue_22' in storeData['X'])&&
+            ('blue_32' in storeData['X'])){
+                numOfFoxes+=1
+            }
+
+            if ('green_5' in storeData['X']){
+                numOfFoxes+=1
+            }
+
+            if ('purple_3' in storeData['val']){
+                numOfFoxes+=1
+            }
+            console.log(scores, numOfFoxes)
+            for (let idx= 0; idx< 5; idx++) {
+                document.getElementById('score_'+idx).innerHTML = scores[idx]
+            }
+            document.getElementById('score_5').innerHTML = numOfFoxes
+            let totalScore = 0
+            let minScore = scores[0]
+            for (let idx= 0; idx< 5; idx++) {
+                minScore = Math.min(minScore,scores[idx])
+                totalScore += scores[idx]
+            }
+            document.getElementById('score_6').innerHTML = numOfFoxes*minScore+totalScore
+
+        })
 
 
         let storeData = localStorage.getItem('morningm00n_gants')
 
         while (storeData != null) {
-            let repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            let repeatAns = true // 
+            //repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
             if (repeatAns == true) {
                 storeData = JSON.parse(storeData)
-                for (const [key, val] of Object.entries(storeData)) {
+                for (const [key, val] of Object.entries(storeData["X"])) {
                     let btn = document.getElementById(key)
-                    if (typeof(val)=='boolean'){
-                        btn.classList.toggle('xMarked')
-                    }
-                    else{
-                        btn.innerHTML=val
+                    btn.style.backgroundImage = "url('img/cross.webp')"
+                }
+                for (const [key, val] of Object.entries(storeData["val"])) {
+                    let btn = document.getElementById(key)
+                    btn.innerHTML = val
+                }
+                for (const [key, val] of Object.entries(storeData["circle"])) {
+                    let btn = document.getElementById(key)
+                    if (val == "circle") {
+                        btn.style.border = "1vw solid black"
+                    } else if (val == "X") {
+                        btn.style.backgroundImage = "url('img/cross.webp')"
+                        btn.style.border = "1vw solid black"
                     }
                 }
+
                 break
             } else {
                 let repAns = confirm('새로운 게임을 시작하시겠습니까?')
@@ -168,6 +400,9 @@
 
         if (storeData == null) {
             storeData = {}
+            storeData["X"] = {}
+            storeData["val"] = {}
+            storeData["circle"] = {}
         }
 
     </script>
