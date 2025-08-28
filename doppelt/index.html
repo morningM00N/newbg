@@ -386,7 +386,7 @@
 
         while (storeData != null) {
             let repeatAns = true // 
-            //repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+            repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
             if (repeatAns == true) {
                 storeData = JSON.parse(storeData)
                 for (const [key, val] of Object.entries(storeData["X"])) {
