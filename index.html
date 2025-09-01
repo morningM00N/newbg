@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body, a, .divGame{
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+        }
+        body {
+            width: 100vw;
+        }
+        .divGame {
+            height: 20vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100vw;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0px;
+        }
+        a {
+            text-shadow: black 3px 3px 1px;  
+            align-items: center;
+            align-content: center;
+            font-size: min(5vw, 5vh);
+            color: white;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body id="body">
+
+</body>
+<script>
+    function addBoardGame(backgroundImgSrc,
+        names,
+        htmlAddresses,
+        prop={}, prop2={}
+    ) {
+        let div = document.createElement("div")
+        div.className = "divGame"
+        document.getElementById("body").appendChild(div)
+        div.style.backgroundImage = `url(${backgroundImgSrc})`
+        for (const key in prop) {
+            div.style[key] = prop[key]
+        }
+
+        for (let i = 0; i < names.length; i++) {
+            let a = document.createElement('a')
+            div.appendChild(a)
+            a.href = htmlAddresses[i]
+            a.innerHTML = names[i]
+            a.style.width = `calc(95vw / ${names.length})`
+            for (const key in prop2) {
+                a.style[key] = prop2[key]
+            }
+        }
+    }
+
+    addBoardGame("https://www.lookout-spiele.de/upload/en_highseason.html_CoverImage.jpg",
+        ["하이시즌 개인판", "하이시즌 주사위판"],
+        ["highseason/highseason.html", "highseason/highseasondiceboard.html"],{"backgroundPositionY":"5%"})
+    addBoardGame("https://m.media-amazon.com/images/I/81jFuwrJv8L._UF894,1000_QL80_.jpg",
+        ["영리한 여유"],
+        ["gants/index.html"],{"backgroundPositionY":"15%"})
+    addBoardGame("https://m.media-amazon.com/images/I/81G73LwhnkL.jpg",
+        ["두 배로 영리한 여유"],
+        ["doppelt/index.html"],{"backgroundPositionY":"15%"})
+    addBoardGame("https://m.media-amazon.com/images/I/81QrPOVjfML._UF894,1000_QL80_.jpg",
+        ["갱스터 진행판"],
+        ["gang/index.html"],{"backgroundPositionY":"5%"})
+    addBoardGame("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPCqA2HnKmekbE41olOhW0-ueQZpOy-PbEZw&s",
+        ["슈퍼메가 럭키박스 개인판", "슈퍼메가 럭키박스 카드 뽑기"],
+        ["smlb/smlbi.html", "smlb/smlb.html"],{"backgroundPositionY":"15%"})
+    addBoardGame("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBlHW7nX-zBJWLWH-g9_vDttE55A16OJ6_qg&s",
+        ["스트림스 개인판", "스트림스 타일 뽑기"],
+        ["https://morningm00n.github.io/bg/streams.html", "streams/index.html"],{"backgroundPositionY":"0%"})
+    addBoardGame("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQInbWZ0rk21oXgWwB1XrGq8-2WAsFb8C-2vw&s",
+        ["재치와 눈치 개인판", "재치와 눈치 문제 뽑기"],
+        ["https://morningm00n.github.io/bg/witspersonal.html", "ww/index.html"],{"backgroundPositionY":"35%"})
+</script>
+
+</html>

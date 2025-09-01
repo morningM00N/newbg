@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        width:100vw;
+        height:100vh;
+        padding: 0px;
+        border: 0px;
+        margin: 0px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .scoreCard {
+        padding: 0px;
+        border: 1px dotted red;
+        margin: 0px;
+        width: 23vw;
+        height: calc(12vw + 23vw * 682 / 489);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .scoreCard img:first-of-type {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .scoreCard img:first-of-type {
+        border: 1px dotted red;
+        width: 8vw;
+        height: 12vw;
+    }
+
+    .scoreCard img:nth-child(2) {
+        border: 1px dotted blue;
+        width: 23vw;
+        height: calc(23vw * 682 / 489);
+    }
+
+    #scoreArea {
+        padding: 0px;
+        border: 0px;
+        margin: 0px;
+        width: 100vw;
+        height: calc(12vw + 23vw * 682 / 489);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1vw;
+    }
+
+    #exploreArea {
+        background-color: lightgray;
+        padding: 0px;
+        border: 0px;
+        margin: 0px;
+        width: 100vw;
+        height: calc(100vh - (12vw + 23vw * 682 / 489));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1vw;
+    }
+
+
+    @media (orientation: landscape) {
+        #scoreArea {
+            padding: 0px;
+            border: 0px;
+            margin: 0px;
+            width: calc(2 * (48vh * 23 * 682 / 489 / (12 + 23 * 682 / 489)) * 489 / 682 + 3vh);
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        #exploreArea {
+            background-color: lightgray;
+            padding: 0px;
+            border: 0px;
+            margin: 0px;
+            width: calc(100vw - 2 * (48vh * 23 * 682 / 489 / (12 + 23 * 682 / 489)) * 489 / 682 + 3vh - 6vh);
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        .scoreCard {
+            padding: 0px;
+            border: 1px dotted red;
+            margin: 0px;
+            width: calc((48vh * 23 * 682 / 489 / (12 + 23 * 682 / 489)) * 489 / 682);
+            height: calc(48vh);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0px;
+        }
+
+        .scoreCard img:first-of-type {
+            border: 1px dotted red;
+            width: calc((48vh * 12 / (12 + 23 * 682 / 489)) * 2 / 3);
+            height: calc(48vh * 12 / (12 + 23 * 682 / 489));
+        }
+
+        .scoreCard img:nth-child(2) {
+            border: 1px dotted blue;
+            width: calc((48vh * 23 * 682 / 489 / (12 + 23 * 682 / 489)) * 489 / 682);
+            height: calc(48vh * 23 * 682 / 489 / (12 + 23 * 682 / 489));
+        }
+
+
+    }
+</style>
+
+<body>
+    <div id="scoreArea">
+        <div id="scoreA" class="scoreCard">
+            <img></img>
+            <img></img>
+        </div>
+        <div id="scoreB" class="scoreCard">
+            <img></img>
+            <img></img>
+        </div>
+        <div id="scoreC" class="scoreCard">
+            <img></img>
+            <img></img>
+        </div>
+        <div id="scoreD" class="scoreCard">
+            <img></img>
+            <img></img>
+        </div>
+    </div>
+    <div id="exploreArea">
+    </div>
+</body>
+<script>
+
+    let clock = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 0]
+    let storeData = localStorage.getItem('morningm00n_cartographers')
+
+    while (storeData != null) {
+        let repeatAns = true // 
+        repeatAns = confirm('진행 중인 게임이 있습니다. 이어서 하시겠습니까?')
+        if (repeatAns == true) {
+            storeData = JSON.parse(storeData)
+
+            break
+        } else {
+            let repAns = confirm('새로운 게임을 시작하시겠습니까?')
+            if (repAns == true) {
+                storeData = null
+                localStorage.removeItem('morningm00n_cartographers')
+            }
+        }
+    }
+
+    if (storeData == null) {
+        storeData = {}
+        storeData['score'] = [Math.floor(Math.random() * 4), Math.floor(Math.random() * 4), Math.floor(Math.random() * 4), Math.floor(Math.random() * 4)]
+        storeData['explore'] = []
+        for (let i = 0; i < 17; i++) {
+            storeData['explore'].push(i)
+        }
+        for (let i = 16; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1))
+            let temp = storeData['explore'][i]
+            storeData['explore'][i] = storeData['explore'][j]
+            storeData['explore'][j] = temp
+        }
+        storeData['whether'] = 0
+        storeData['passed'] = 0
+    }
+
+</script>
+
+</html>
