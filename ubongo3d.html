@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div {
+        display: flex;
+    }
+
+    table {
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    td {
+        text-align: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid black;
+    }
+</style>
+
+<body id="mainBody">
+</body>
+<script>
+
+
+
+    function assert(condition, message) {
+        if (!condition) {
+            throw new Error(message || 'Assertion failed');
+        }
+    }
+
+
+    class XorShiftPRNG {
+        /**
+         * @param {number} seed 초기 시드 (0~0xffffffff)
+         */
+        constructor(seed) {
+            // 32‑bit unsigned 로 강제 변환
+            this.state = (seed >>> 0);
+            // XorShift 는 state 가 0이면 절대 진전하지 않으므로 0이면 1 로 교체
+            if (this.state === 0) this.state = 0x1;
+        }
+
+        /**
+         * 다음 난수(32‑bit unsigned) 반환
+         * @returns {number}
+         */
+        next() {
+            // XorShift32 알고리즘
+            let x = this.state;
+            x ^= (x << 13) >>> 0;
+            x ^= (x >>> 17);
+            x ^= (x << 5) >>> 0;
+            this.state = x >>> 0;          // unsigned 32‑bit 로 저장
+            return this.state;
+        }
+
+        /**
+         * [min, max] 사이의 정수를 균등하게 반환
+         * @param {number} min 최소값 (포함)
+         * @param {number} max 최대값 (포함)
+         * @returns {number}
+         */
+        nextInt(min, max) {
+            // 입력 검증
+            if (min > max) [min, max] = [max, min];
+            const range = max - min + 1;
+            // 2³² 로 나누어 부동소수점 연산 없이 균등 분포 확보
+            const rand = this.next() / 0x100000000; // [0,1)
+            return Math.floor(rand * range) + min;
+        }
+    }
+
+
+    function getComplexSeed() {
+        const now = new Date();
+        const timestamp = now.getTime();
+        const microseconds = now.getMilliseconds() * 1000 + now.getSeconds() * 1000000;
+        const retValue = timestamp + microseconds + performance.now() * 1000;
+        return retValue;
+    }
+
+    class Mino {
+        constructor() {
+        }
+        compact() {
+            let com = this.clone()
+            while (true) {
+                let empty = true
+                for (let j = 0; j < com.arr[0].length; j++) {
+                    for (let k = 0; k < com.arr[0][j].length; k++) {
+                        if (com.arr[0][j][k] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                for (let i = 0; i < com.arr.length - 1; i++) {
+                    com.arr[i] = com.arr[i + 1]
+                }
+                com.arr.pop()
+            }
+
+            while (true) {
+                let empty = true
+                let lastIdx = com.arr.length - 1
+                for (let j = 0; j < com.arr[lastIdx].length; j++) {
+                    for (let k = 0; k < com.arr[lastIdx][j].length; k++) {
+                        if (com.arr[lastIdx][j][k] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                com.arr.pop()
+            }
+
+
+            while (true) {
+                let empty = true
+                let targetIdx = com.arr[0].length - 1
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i][targetIdx].length; j++) {
+                        if (com.arr[i][targetIdx][j] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                for (let i = 0; i < com.arr.length; i++) {
+                    com.arr[i].pop()
+                }
+
+            }
+
+
+            while (true) {
+                let empty = true
+                let targetIdx = 0
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i][targetIdx].length; j++) {
+                        if (com.arr[i][targetIdx][j] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i].length - 1; j++) {
+                        com.arr[i][j] = com.arr[i][j + 1]
+                    }
+                    com.arr[i].pop()
+                }
+
+            }
+
+            while (true) {
+                let empty = true
+                let targetIdx = 0
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i].length; j++) {
+                        if (com.arr[i][j][targetIdx] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i].length; j++) {
+                        for (let k = 0; k < com.arr[i][j].length - 1; k++) {
+                            com.arr[i][j][k] = com.arr[i][j][k + 1]
+                        }
+                        com.arr[i][j].pop()
+
+                    }
+                }
+            }
+
+            while (true) {
+                let empty = true
+                let targetIdx = com.arr[0][0].length - 1
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i].length; j++) {
+                        if (com.arr[i][j][targetIdx] != 0) {
+                            empty = false;
+                            break
+                        }
+                    }
+                    if (empty == false) break
+                }
+                if (empty == false) break
+                for (let i = 0; i < com.arr.length; i++) {
+                    for (let j = 0; j < com.arr[i].length; j++) {
+                        com.arr[i][j].pop()
+
+                    }
+                }
+            }
+
+
+            return com
+        }
+        equal(otherMino) {
+            if (this.arr.length != otherMino.arr.length) return false
+            for (let i = 0; i < this.arr.length; i++) {
+                if (this.arr[i].length != otherMino.arr[i].length) return false
+                for (let j = 0; j < this.arr[i].length; j++) {
+                    if (this.arr[i][j].length != otherMino.arr[i][j].length) return false
+                    for (let k = 0; k < this.arr[i][j].length; k++) {
+                        if (this.arr[i][j][k] != otherMino.arr[i][j][k]) return false
+                    }
+                }
+            }
+            return true
+        }
+        less(otherMino) {
+            if (this.numOfMinos != otherMino.numOfMinos) return this.numOfMinos < otherMino.numOfMinos
+            if (this.arr.length != otherMino.arr.length) return this.arr.length < otherMino.arr.length
+            for (let i = 0; i < this.arr.length; i++) {
+                if (this.arr[i].length != otherMino.arr[i].length) return this.arr[i].length < otherMino.arr[i].length
+                for (let j = 0; j < this.arr[i].length; j++) {
+                    if (this.arr[i][j].length != otherMino.arr[i][j].length) return this.arr[i][j].length < otherMino.arr[i][j].length
+                    for (let k = 0; k < this.arr[i][j].length; k++) {
+                        if (this.arr[i][j][k] != otherMino.arr[i][j][k])
+                            return this.arr[i][j][k] < otherMino.arr[i][j][k]
+                    }
+                }
+            }
+            return false
+        }
+        getTable() {
+            let table = []
+            for (let index = 0; index < this.arr.length; index++) {
+                let t = document.createElement("table")
+                table.push(t)
+                for (let i2 = 0; i2 < this.arr[index].length; i2++) {
+                    let tr = document.createElement("tr")
+                    t.appendChild(tr)
+                    for (let i3 = 0; i3 < this.arr[index][i2].length; i3++) {
+                        let td = document.createElement("td")
+                        tr.appendChild(td)
+                        if (this.arr[index][i2][i3] == 1) {
+                            td.style.backgroundColor = this.color
+                        }
+                    }
+                }
+            }
+            return table
+        }
+        show() {
+            for (let i = 0; i < 3; i++) {
+                for (let i2 = 0; i2 < 3; i2++) {
+                    for (let i3 = 0; i3 < 3; i3++) {
+                        document.getElementById("td" + i + i2 + i3).style.backgroundColor = "transparent"
+                    }
+                }
+            }
+            for (let i = 0; i < this.arr.length; i++) {
+                for (let i2 = 0; i2 < this.arr[i].length; i2++) {
+                    for (let i3 = 0; i3 < this.arr[i][i2].length; i3++) {
+                        if (this.arr[i][i2][i3] == 1)
+                            document.getElementById("td" + i + i2 + i3).style.backgroundColor = this.color
+                    }
+                }
+            }
+        }
+        rotate() {
+            let rotatedArr = Array(this.size).fill().map(() => Array(this.size).fill().map(() => Array(this.size).fill(0)))
+            for (let i = 0; i < rotatedArr.length; i++) {
+                for (let j = 0; j < rotatedArr[i].length; j++) {
+                    for (let k = 0; k < rotatedArr[i][j].length; k++) {
+                        rotatedArr[i][j][k] = this.arr[i][k][this.size - j - 1]
+                    }
+                }
+            }
+            this.arr = rotatedArr
+
+        }
+
+        rotate2() {
+            let rotatedArr = Array(this.size).fill().map(() => Array(this.size).fill().map(() => Array(this.size).fill(0)))
+            for (let i = 0; i < rotatedArr.length; i++) {
+                for (let j = 0; j < rotatedArr[i].length; j++) {
+                    for (let k = 0; k < rotatedArr[i][j].length; k++) {
+                        rotatedArr[i][j][k] = this.arr[this.size - k - 1][j][i]
+                    }
+                }
+            }
+            this.arr = rotatedArr
+        }
+
+        rotate3() {
+            let rotatedArr = Array(this.size).fill().map(() => Array(this.size).fill().map(() => Array(this.size).fill(0)))
+            for (let i = 0; i < rotatedArr.length; i++) {
+                for (let j = 0; j < rotatedArr[i].length; j++) {
+                    for (let k = 0; k < rotatedArr[i][j].length; k++) {
+                        rotatedArr[i][j][k] = this.arr[j][this.size - 1 - i][k]
+                    }
+                }
+            }
+            this.arr = rotatedArr
+        }
+
+        clone() {
+            let cloneMino = new Mino()
+            cloneMino.color = this.color
+            cloneMino.size = this.size
+            cloneMino.numOfMinos = this.numOfMinos
+            cloneMino.arr = []
+            for (let i = 0; i < this.arr.length; i++) {
+                cloneMino.arr[i] = []
+                for (let j = 0; j < this.arr[i].length; j++) {
+                    cloneMino.arr[i][j] = []
+                    for (let k = 0; k < this.arr[i][j].length; k++) {
+                        cloneMino.arr[i][j][k] = this.arr[i][j][k]
+
+                    }
+                }
+            }
+            return cloneMino
+        }
+    }
+
+    class RedMino1 extends Mino {
+        constructor() {
+            super()
+            this.color = "RED"
+            this.size = 2
+            this.numOfMinos = 4
+            this.arr = [[[1, 0], [1, 1]], [[0, 0], [0, 1]]]
+        }
+    }
+
+    class RedMino2 extends Mino {
+        constructor() {
+            super()
+            this.color = "RED"
+            this.size = 2
+            this.numOfMinos = 2
+            this.arr = [[[1, 1], [0, 0]], [[0, 0], [0, 0]]]
+        }
+    }
+
+
+    class GreenMino1 extends Mino {
+        constructor() {
+            super()
+            this.color = "GREEN"
+            this.size = 2
+            this.numOfMinos = 3
+            this.arr = [[[1, 1], [0, 1]], [[0, 0], [0, 0]]]
+        }
+    }
+
+    class GreenMino2 extends Mino {
+        constructor() {
+            super()
+            this.color = "GREEN"
+            this.size = 3
+            this.numOfMinos = 5
+            this.arr = [[[1, 1, 0], [0, 1, 0], [0, 1, 0]], [[1, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]]
+        }
+    }
+
+    class YellowMino1 extends Mino {
+        constructor() {
+            super()
+            this.color = "YELLOW"
+            this.size = 2
+            this.numOfMinos = 4
+            this.arr = [[[1, 0], [1, 1]], [[1, 0], [0, 0]]]
+        }
+    }
+
+    class YellowMino2 extends Mino {
+        constructor() {
+            super()
+            this.color = "YELLOW"
+            this.size = 3
+            this.numOfMinos = 5
+            this.arr = [[[1, 1, 1], [0, 0, 1], [0, 0, 0]], [[0, 1, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]]
+        }
+    }
+
+    class BlueMino1 extends Mino {
+        constructor() {
+            super()
+            this.color = "BLUE"
+            this.size = 3
+            this.numOfMinos = 4
+            this.arr = [[[1, 0, 0], [1, 0, 0], [1, 1, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]]
+        }
+    }
+
+    class BlueMino2 extends Mino {
+        constructor() {
+            super()
+            this.color = "BLUE"
+            this.size = 3
+            this.numOfMinos = 5
+            this.arr = [[[1, 0, 0], [1, 1, 0], [0, 1, 0]], [[1, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]]
+        }
+    }
+
+
+    class Map {
+        constructor(w, h, s) {
+            this.numOfMinos = 0
+            this.row = w;
+            this.col = h;
+            if (s == undefined) {
+                this.gen = new XorShiftPRNG(getComplexSeed())
+            } else {
+                this.gen = new XorShiftPRNG(s)
+            }
+            this.arr = Array(this.row).fill().map(() => Array(this.col).fill(0))
+        }
+        getTable() {
+            let table = document.createElement("table")
+            for (let index = 0; index < this.arr.length; index++) {
+                let tr = document.createElement("tr")
+                for (let index2 = 0; index2 < this.arr[index].length; index2++) {
+                    let td = document.createElement("td")
+                    if (this.arr[index][index2] == 1) {
+                        td.style.backgroundColor = "black"
+                    }
+                    tr.appendChild(td)
+                }
+                table.appendChild(tr)
+
+            }
+            return table
+        }
+        set() {
+            this.numOfMinos = 0
+            let len = this.gen.nextInt(1, this.col)
+            this.numOfMinos += len
+            let startCol = this.gen.nextInt(0, this.col - 1)
+            this.arr[0][startCol] = 1
+            for (let index = 0; index < len - 1; index++) {
+                let dir = this.gen.nextInt(0, 1)
+                if (this.arr[0][0] == 1) {
+                    dir = 1;
+                }
+                if (this.arr[0][this.col - 1] == 1) {
+                    dir = 0;
+                }
+
+                if (dir == 0) {
+                    let targetCol = startCol
+                    while (this.arr[0][targetCol] == 1) {
+                        targetCol -= 1
+                    }
+                    this.arr[0][targetCol] = 1
+                }
+                else {
+                    let targetCol = startCol
+                    while (this.arr[0][targetCol] == 1) {
+                        targetCol += 1
+                    }
+                    this.arr[0][targetCol] = 1
+
+                }
+            }
+            for (let r = 1; r < this.row; r++) {
+                let startCol = this.gen.nextInt(0, this.col - 1)
+                while (this.arr[r - 1][startCol] == 0) {
+                    startCol = this.gen.nextInt(0, this.col - 1)
+                }
+                this.arr[r][startCol] = 1
+                let len = this.gen.nextInt(1, this.col)
+                this.numOfMinos += len
+                for (let index = 0; index < len - 1; index++) {
+                    let dir = this.gen.nextInt(0, 1)
+                    if (this.arr[r][0] == 1) {
+                        dir = 1;
+                    }
+                    if (this.arr[r][this.col - 1] == 1) {
+                        dir = 0;
+                    }
+
+                    if (dir == 0) {
+                        let targetCol = startCol
+                        while (this.arr[r][targetCol] == 1) {
+                            targetCol -= 1
+                        }
+                        this.arr[r][targetCol] = 1
+                    }
+                    else {
+                        let targetCol = startCol
+                        while (this.arr[r][targetCol] == 1) {
+                            targetCol += 1
+                        }
+                        this.arr[r][targetCol] = 1
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    function createChild(parent, tag, id) {
+        let child = document.createElement(tag)
+        if (id != undefined)
+            child.id = id
+        parent.appendChild(child)
+        return child
+    }
+    let selectedCell = []
+    let usedMinos = [false, false, false, false, false, false, false, false]
+    let allMino = [
+        new RedMino1(), new RedMino2(),
+        new BlueMino1(), new BlueMino2(),
+        new GreenMino1(), new GreenMino2(),
+        new YellowMino1(), new YellowMino2()]
+
+    let names = [
+        "R1", "R2",
+        "B1", "B2",
+        "G1", "G2",
+        "Y1", "Y2"
+    ]
+
+
+    let mainBody = document.getElementById("mainBody")
+    {
+        let divProblem = createChild(mainBody, "div")
+        for (let i = 0; i < names.length; i++) {
+            let checkBox = createChild(divProblem, "input")
+            checkBox.checked = true
+            checkBox.onchange = function () {
+                if (event.srcElement.checked == false) {
+                    usedMinos[i] = true
+                } else {
+                    usedMinos[i] = false
+                }
+            }
+            checkBox.type = 'checkbox'
+            let p = createChild(divProblem, 'p')
+            p.innerHTML = names[i] + "("+allMino[i].numOfMinos+") &nbsp"
+
+        }
+    }
+    {
+        let divProblem = createChild(mainBody, "div")
+        let tableProblem = createChild(divProblem, "table")
+        for (let i = 0; i < 10; i++) {
+            let tr = createChild(tableProblem, "tr")
+            selectedCell.push([])
+            for (let j = 0; j < 10; j++) {
+                selectedCell[i].push(false)
+                let td = createChild(tr, "td")
+                td.onclick = function () {
+                    selectedCell[i][j] = !selectedCell[i][j]
+                    if (selectedCell[i][j] == true) {
+                        event.srcElement.style.backgroundColor = "black"
+                    } else {
+                        event.srcElement.style.backgroundColor = "transparent"
+                    }
+                }
+            }
+        }
+
+        let btn = createChild(divProblem, "button")
+        btn.innerHTML = "calculate"
+        btn.onclick = function () {
+            while (mainBody.childElementCount >= 6) {
+                mainBody.removeChild(mainBody.lastChild)
+            }
+
+            let minRow = 0x7fffffff
+            let minCol = 0x7fffffff
+            let maxRow = 0
+            let maxCol = 0
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j++) {
+                    if (selectedCell[i][j] == true) {
+                        if (i < minRow) {
+                            minRow = i
+                        }
+                        if (i > maxRow) {
+                            maxRow = i
+                        }
+                        if (j < minCol) {
+                            minCol = j
+                        }
+                        if (j > maxCol) {
+                            maxCol = j
+                        }
+                    }
+                }
+            }
+
+
+            let allMap = []
+            let recon = []
+            let remainBlocks = 0
+
+            for (let i = 0; i < maxRow - minRow + 1; i++) {
+                allMap.push([])
+                for (let j = 0; j < maxCol - minCol + 1; j++) {
+                    if (selectedCell[i + minRow][j + minCol] == true) {
+                        allMap[i].push([1, 1])
+                        remainBlocks += 2
+                    } else {
+                        allMap[i].push([0, 0])
+                    }
+
+                }
+            }
+            console.log(allMap)
+
+            let result = recur(allMap, usedMinos, remainBlocks, recon)
+            if (result == false) {
+                alert("Impossible!")
+            } else {
+
+                allMap = []
+                for (let i = 0; i < maxRow - minRow + 1; i++) {
+                    allMap.push([])
+                    for (let j = 0; j < maxCol - minCol + 1; j++) {
+                        if (selectedCell[i + minRow][j + minCol] == true) {
+                            allMap[i].push([1, 1])
+                            remainBlocks += 2
+                        } else {
+                            allMap[i].push([0, 0])
+                        }
+
+                    }
+                }
+
+                for (let i2 = 0; i2 < recon.length; i2++) {
+                    const element = recon[i2];
+                    let idx = element[0]
+                    let idx2 = element[1]
+                    let r = element[2]
+                    let c = element[3]
+                    let h = element[4]
+
+                    let thisMino = optDistinct[idx][idx2]
+                    for (let i = 0; i < thisMino.arr.length; i++) {
+                        for (let j = 0; j < thisMino.arr[i].length; j++) {
+                            for (let k = 0; k < thisMino.arr[i][j].length; k++) {
+                                if (thisMino.arr[i][j][k] == 1) {
+                                    assert(allMap[r + i][c + j][h + k] == 1)
+                                    allMap[r + i][c + j][h + k] = [thisMino.color, i2]
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    let divResult = createChild(mainBody, "div")
+                    for (let h = 0; h < 2; h++) {
+                        let table = createChild(divResult, "table")
+
+                        for (let i = 0; i < allMap.length; i++) {
+                            let tr = createChild(table, "tr")
+                            for (let j = 0; j < allMap[i].length; j++) {
+                                let td = createChild(tr, "td")
+                                if (allMap[i][j][h] != 0) {
+                                    td.style.backgroundColor = allMap[i][j][h][0]
+                                    td.innerHTML = names[allMap[i][j][h][1]]
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+
+            }
+
+        }
+    }
+
+    usedMinos = [false, false, false, false, false, false, false, false]
+
+    let optDistinct = []
+
+    for (let idx = 0; idx < allMino.length; idx++) {
+        let mino = allMino[idx]
+
+        let optdistinct = []
+        optDistinct.push(optdistinct)
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                for (let k = 0; k < 4; k++) {
+                    let temp = mino.clone()
+                    for (let i2 = 0; i2 < i; i2++) {
+                        temp.rotate()
+                    }
+                    for (let j2 = 0; j2 < j; j2++) {
+                        temp.rotate2()
+                    }
+                    for (let k2 = 0; k2 < k; k2++) {
+                        temp.rotate3()
+                    }
+                    let com = temp.compact()
+                    if (com.arr[0][0].length > 2) continue
+                    let newItem = true
+                    for (let l = 0; l < optdistinct.length; l++) {
+                        if (com.equal(optdistinct[l])) {
+                            newItem = false
+                            break
+                        }
+                    }
+                    if (newItem == true) {
+                        optdistinct.push(com)
+                    }
+                }
+            }
+        }
+    }
+
+
+    let note = {}
+    let minSize = 0x7fffffff
+    let cache = 0
+    let totalCall = 0
+
+    function recur(curMap, usedMinos, remainBlocks, recon) {
+        let curMapIdx = 0
+        if (remainBlocks < minSize) {
+            minSize = remainBlocks
+            console.log(minSize)
+        }
+        if (remainBlocks == 0) return true
+        totalCall += 1
+
+        let computeRemainBlock = 0
+        for (let r = 0; r < curMap.length; r++) {
+            for (let c = 0; c < curMap[r].length; c++) {
+                for (let h = 0; h < curMap[r][c].length; h++) {
+                    curMapIdx = curMapIdx * 2
+                    const element = curMap[r][c][h];
+                    if (element == 1) {
+                        curMapIdx = (curMapIdx + 1)
+                        computeRemainBlock += 1
+                    }
+                }
+            }
+        }
+        for (let i = 0; i < usedMinos.length; i++) {
+            curMapIdx *= 2
+            if (usedMinos[i] == true) {
+                curMapIdx += 1
+            }
+        }
+        if (curMapIdx in note) {
+            cache += 1
+            return note[curMapIdx]
+        }
+        assert(computeRemainBlock == remainBlocks, "" + computeRemainBlock + "," + remainBlocks)
+        for (let idx = 0; idx < usedMinos.length; idx++) {
+            if (usedMinos[idx] == true) continue
+            if (remainBlocks < usedMinos[idx].numOfMinos) continue
+            usedMinos[idx] = true
+            remainBlocks -= optDistinct[idx][0].numOfMinos
+            if (remainBlocks >= 0) {
+
+                for (let r = 0; r < curMap.length; r++) {
+                    for (let c = 0; c < curMap[r].length; c++) {
+                        for (let h = 0; h < 2; h++) {
+
+                            for (let idx2 = 0; idx2 < optDistinct[idx].length; idx2++) {
+                                let sat = true
+                                let thisMino = optDistinct[idx][idx2]
+                                for (let i = 0; i < thisMino.arr.length; i++) {
+                                    if (r + i >= curMap.length) {
+                                        sat = false
+                                        break
+                                    }
+                                    for (let j = 0; j < thisMino.arr[i].length; j++) {
+                                        if (c + j >= curMap[r + i].length) {
+                                            sat = false
+                                            break
+                                        }
+                                        for (let k = 0; k < thisMino.arr[i][j].length; k++) {
+                                            if (h + k >= curMap[r + i][c + j].length) {
+                                                sat = false
+                                                break
+                                            }
+                                            if (thisMino.arr[i][j][k] == 1 && curMap[r + i][c + j][h + k] == 0) {
+                                                sat = false
+                                                break
+                                            }
+                                        }
+                                        if (sat == false) break
+                                    }
+                                    if (sat == false) break
+                                }
+                                if (sat == true) {
+                                    recon.push([idx, idx2, r, c, h])
+                                    for (let i = 0; i < thisMino.arr.length; i++) {
+                                        if (r + i >= curMap.length) continue
+                                        for (let j = 0; j < thisMino.arr[i].length; j++) {
+                                            if (c + j >= curMap[r + i].length) continue
+                                            for (let k = 0; k < thisMino.arr[i][j].length; k++) {
+                                                if (h + k >= curMap[r + i][c + j].length) continue
+                                                if (thisMino.arr[i][j][k] == 1) {
+                                                    assert(curMap[r + i][c + j][h + k] == 1)
+                                                    curMap[r + i][c + j][h + k] = 0
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    let ret = recur(curMap, usedMinos, remainBlocks, recon)
+                                    if (ret == true) {
+                                        note[curMapIdx] = true
+                                        return true
+                                    }
+
+                                    recon.pop()
+                                    for (let i = 0; i < thisMino.arr.length; i++) {
+                                        if (r + i >= curMap.length) continue
+                                        for (let j = 0; j < thisMino.arr[i].length; j++) {
+                                            if (c + j >= curMap[r + i].length) continue
+                                            for (let k = 0; k < thisMino.arr[i][j].length; k++) {
+                                                if (h + k >= curMap[r + i][c + j].length) continue
+                                                if (thisMino.arr[i][j][k] == 1) {
+                                                    curMap[r + i][c + j][h + k] = 1
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            remainBlocks += optDistinct[idx][0].numOfMinos
+            usedMinos[idx] = false
+        }
+        note[curMapIdx] = false
+        return false
+    }
+
+</script>
+
+</html>
